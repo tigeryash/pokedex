@@ -10,18 +10,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { TFormSchema, formSchema } from "@/types/message-type";
-import useMessageStore from "@/stores/messagesstore";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { CameraIcon, ImageIcon } from "@radix-ui/react-icons";
-import { continueConversation } from "@/app/actions";
-import { readStreamableValue } from "ai/rsc";
-import { CoreMessage } from "ai";
+import { AI, UIState } from "@/app/actions";
+import { useActions, useUIState } from "ai/rsc";
+import { nanoid } from "ai";
 
 const ChatInput = () => {
-  const setMessages = useMessageStore((state) => state.setMessages);
-  const messages = useMessageStore((state) => state.messages);
+  const { continueConversation } = useActions<typeof AI>();
+  const [messages, setMessages] = useUIState();
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<TFormSchema>({
@@ -41,24 +40,15 @@ const ChatInput = () => {
   };
 
   const onSubmit = async (data: TFormSchema) => {
-    const newMessages: CoreMessage[] = [
-      ...messages,
-      { content: data.message, role: "user" },
-    ];
-
-    // Reset the form
     form.reset({ message: "" });
+    setMessages((currConvo: UIState[]) => [
+      ...currConvo,
+      { id: nanoid(), role: "user", display: data.message },
+    ]);
 
-    // Continue the conversation with the updated messages
-    const result = await continueConversation(newMessages);
+    const response = await continueConversation(data.message);
 
-    // Read the assistant's response and update the messages state
-    for await (const content of readStreamableValue(result)) {
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: content as string },
-      ]);
-    }
+    setMessages((currConvo: UIState[]) => [...currConvo, response]);
   };
 
   return (

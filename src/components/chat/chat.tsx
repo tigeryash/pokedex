@@ -10,12 +10,13 @@ import {
 } from "@/components/ui/tooltip";
 import { motion, useAnimate } from "framer-motion";
 import ChatInput from "./chat-input";
-import useMessageStore from "@/stores/messagesstore";
+import { useUIState } from "ai/rsc";
+import { UIState } from "@/app/actions";
 
 const Chat = () => {
   const [open, setOpen] = useState(true);
   const [scope, animate] = useAnimate();
-  const messages = useMessageStore((state) => state.messages);
+  const [messages] = useUIState(); // Removed the incorrect type annotation <UIState[]>
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
@@ -45,6 +46,8 @@ const Chat = () => {
 
   useEffect(scrollToBottom, [messages, open]);
 
+  console.log(messages);
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -64,9 +67,9 @@ const Chat = () => {
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-2 bg-slate-200 w-full rounded-lg text-black text-sm">
-                  {messages.map((msg, idx) => (
+                  {messages.map((msg: UIState) => (
                     <div
-                      key={`${msg.content}-${idx}`}
+                      key={msg.id}
                       className={`chat ${
                         msg.role === "user" ? "chat-end" : "chat-start"
                       }`}
@@ -74,11 +77,7 @@ const Chat = () => {
                       <div className="chat-header">
                         {msg.role === "user" ? "Trainer" : "Professor"}
                       </div>
-                      <div className="chat-bubble">
-                        {typeof msg.content === "string"
-                          ? msg.content
-                          : JSON.stringify(msg.content)}
-                      </div>
+                      <div className="chat-bubble">{msg.display}</div>
                     </div>
                   ))}
 
