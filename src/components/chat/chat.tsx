@@ -14,7 +14,7 @@ import { useUIState } from "ai/rsc";
 import { ClientMessage } from "@/app/actions";
 
 const Chat = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [scope, animate] = useAnimate();
   const [messages] = useUIState(); // Removed the incorrect type annotation <UIState[]>
 
