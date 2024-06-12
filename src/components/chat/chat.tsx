@@ -30,8 +30,8 @@ const Chat = () => {
   useEffect(() => {
     if (open) {
       animate(scope.current, {
-        width: innerWidth - 90,
-        height: 500,
+        width: innerWidth > 800 ? 800 : innerWidth - 90,
+        height: innerHeight > 500 ? innerHeight - 200 : innerHeight * 0.1,
         borderRadius: "1rem",
       });
     }

@@ -26,7 +26,6 @@ export async function continueConversation(
   const history = getMutableAIState();
 
   // Debugging the history object
-  console.log("History object:", history);
 
   const result = await streamUI({
     model: openai("gpt-4o"),
@@ -51,8 +50,10 @@ export async function continueConversation(
         generate: async function* ({ name }) {
           yield <div>Loading...</div>;
           try {
-            const pokemon = await P.getPokemonByName(name);
-            console.log(pokemon);
+            const pokemon = await P.getResource([
+              `/api/v2/pokemon/${name}`,
+              `/api/v2/pokemon-species/${name}`,
+            ]);
             return <PokemonInfoCard pokemon={pokemon} />;
           } catch (error) {
             console.log(error);
