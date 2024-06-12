@@ -17,9 +17,8 @@ import { CameraIcon, ImageIcon } from "@radix-ui/react-icons";
 import { AI, ClientMessage } from "@/app/actions";
 import { useActions, useUIState } from "ai/rsc";
 import { nanoid } from "ai";
-
 const ChatInput = () => {
-  const { continueConversation } = useActions<typeof AI>();
+  const { continueConversation } = useActions();
   const [messages, setMessages] = useUIState();
   const formRef = useRef<HTMLFormElement>(null);
 
