@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import React, { useRef } from "react";
 import { CameraIcon, ImageIcon } from "@radix-ui/react-icons";
-import { AI, UIState } from "@/app/actions";
+import { AI, ClientMessage } from "@/app/actions";
 import { useActions, useUIState } from "ai/rsc";
 import { nanoid } from "ai";
 
@@ -41,14 +41,14 @@ const ChatInput = () => {
 
   const onSubmit = async (data: TFormSchema) => {
     form.reset({ message: "" });
-    setMessages((currConvo: UIState[]) => [
+    setMessages((currConvo: ClientMessage[]) => [
       ...currConvo,
       { id: nanoid(), role: "user", display: data.message },
     ]);
 
     const response = await continueConversation(data.message);
 
-    setMessages((currConvo: UIState[]) => [...currConvo, response]);
+    setMessages((currConvo: ClientMessage[]) => [...currConvo, response]);
   };
 
   return (

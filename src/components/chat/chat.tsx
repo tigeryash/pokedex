@@ -11,7 +11,7 @@ import {
 import { motion, useAnimate } from "framer-motion";
 import ChatInput from "./chat-input";
 import { useUIState } from "ai/rsc";
-import { UIState } from "@/app/actions";
+import { ClientMessage } from "@/app/actions";
 
 const Chat = () => {
   const [open, setOpen] = useState(true);
@@ -67,7 +67,7 @@ const Chat = () => {
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-2 bg-slate-200 w-full rounded-lg text-black text-sm">
-                  {messages.map((msg: UIState) => (
+                  {messages.map((msg: ClientMessage) => (
                     <div
                       key={msg.id}
                       className={`chat ${

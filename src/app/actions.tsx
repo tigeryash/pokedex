@@ -6,35 +6,39 @@ import { z } from "zod";
 import PokemonInfoCard from "@/components/pokemonchat/pokemon-info-card";
 import { ReactNode } from "react";
 
-export type UIState = {
+export type ServerMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+export type ClientMessage = {
   id: string;
   role: "user" | "assistant";
   display: ReactNode;
 };
 
-export async function continueConversation(message: string): Promise<UIState> {
+export async function continueConversation(
+  message: string
+): Promise<ClientMessage> {
   "use server";
+
   const P = new Pokedex();
-  const history = getMutableAIState<typeof AI>();
+  const history = getMutableAIState();
 
   // Debugging the history object
   console.log("History object:", history);
-
-  const historyMessages = history.get();
-  if (!Array.isArray(historyMessages)) {
-    throw new Error("history.get() did not return an array");
-  }
-
-  history.update([...historyMessages, { role: "user", content: message }]);
 
   const result = await streamUI({
     model: openai("gpt-4o"),
     system: `You are a Pokemon Professor. You only answer questions 
       relating to Pokemon. You go by the name The Professor. You are used on a Pokedex app.`,
-    messages: history.get(),
+    messages: [...history.get(), { role: "user", content: message }],
     text: ({ content, done }) => {
       if (done) {
-        history.done([...history.get(), { role: "assistant", content }]);
+        history.done((messages: ServerMessage[]) => [
+          ...messages,
+          { role: "assistant", content },
+        ]);
       }
       return <div>{content}</div>;
     },
@@ -62,20 +66,13 @@ export async function continueConversation(message: string): Promise<UIState> {
   return {
     id: nanoid(),
     role: "assistant",
-    display: <>{result.value}</>,
+    display: result.value,
   };
 }
 
-export const initialUIState: UIState[] = [
-  {
-    id: nanoid(),
-    role: "assistant",
-    display: <div>testing to see if this works</div>,
-  },
-];
-
-export const AI = createAI({
-  initialUIState, // Ensure this is correctly set
+export const AI = createAI<ServerMessage[], ClientMessage[]>({
+  initialUIState: [],
+  initialAIState: [], // Ensure this is correctly set
   actions: {
     continueConversation,
   },
