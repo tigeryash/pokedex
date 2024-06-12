@@ -46,8 +46,6 @@ const Chat = () => {
 
   useEffect(scrollToBottom, [messages, open]);
 
-  console.log(messages);
-
   return (
     <TooltipProvider>
       <Tooltip>

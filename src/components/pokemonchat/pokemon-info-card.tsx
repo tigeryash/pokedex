@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { PokemonTypes, PokemonTypesColors } from "../../lib/constants";
 import { useState } from "react";
+import Link from "next/link";
 
 type PokemonTypeKey = keyof typeof PokemonTypesColors;
 
@@ -10,7 +11,6 @@ const PokemonInfoCard = ({ pokemon }: { pokemon: any }) => {
   const englishDescription = pokemon[1].flavor_text_entries.filter(
     (description: any) => description.language.name === "en"
   );
-  console.log(englishDescription);
   return (
     <div className="relative flex flex-col items-center justify-center w-full  p-4 bg-zinc-200 rounded-lg">
       <div className="absolute top-2 left-2 md:top-4 md:left-4 flex flex-col  text-left">
@@ -41,7 +41,7 @@ const PokemonInfoCard = ({ pokemon }: { pokemon: any }) => {
           ))}
         </div>
       </div>
-      <div className="p-2">
+      <div className="py-2 sm:p-2">
         {englishDescription.length > 0 ? (
           <div className="">
             <p className=" text-sm md:text-lg capitalize text-black">
@@ -54,7 +54,7 @@ const PokemonInfoCard = ({ pokemon }: { pokemon: any }) => {
         ) : (
           <p>No description available</p>
         )}
-        <div className="flex text-xs md:text-base justify-between font-bold pt-4 md:pt-8">
+        <div className="flex text-xs md:text-base justify-between font-bold py-4 md:pt-8">
           <button
             className="bg-blue-500 text-zinc-300 p-2 rounded-lg"
             onClick={() => {
@@ -80,6 +80,11 @@ const PokemonInfoCard = ({ pokemon }: { pokemon: any }) => {
             Next
           </button>
         </div>
+        <Link href={`/pokemon/${pokemon[0].id}`}>
+          <button className="underline text-blue-500 text-center w-full">
+            View Pokemon
+          </button>
+        </Link>
       </div>
     </div>
   );
