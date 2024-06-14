@@ -19,6 +19,27 @@ export const PokemonTypesColors = {
   fairy: "#D685AD",
 } as const;
 
+export const PokemonTypesColorsRGBA = {
+  normal: "rgba(168, 167, 122, .5)",
+  fire: "rgba(238, 129, 48, .5)",
+  water: "rgba(99, 144, 240, .5)",
+  electric: "rgba(247, 208, 44, .5)",
+  grass: "rgba(122, 199, 76, .5)",
+  ice: "rgba(150, 217, 214, .5)",
+  fighting: "rgba(194, 46, 40, .5)",
+  poison: "rgba(163, 62, 161, .5)",
+  ground: "rgba(226, 191, 101, .5)",
+  flying: "rgba(169, 143, 243, .5)",
+  psychic: "rgba(249, 85, 135, .5)",
+  bug: "rgba(166, 185, 26, .5)",
+  rock: "rgba(182, 161, 54, .5)",
+  ghost: "rgba(115, 87, 151, .5)",
+  dragon: "rgba(111, 53, 252, .5)",
+  dark: "rgba(112, 87, 70, .5)",
+  steel: "rgba(183, 183, 206, .5)",
+  fairy: "rgba(214, 133, 173, .5)",
+} as const;
+
 export const PokemonTypes = {
   normal:
     "https://archives.bulbagarden.net/media/upload/9/95/Normal_icon_SwSh.png",

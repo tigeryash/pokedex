@@ -33,7 +33,7 @@ const Search = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       if (!e.shiftKey) {
-        formRef.current?.requestSubmit();
+        router.push(`/pokemon?query=${query}`);
       }
     }
   };
@@ -44,14 +44,14 @@ const Search = () => {
   };
 
   return (
-    <div className="flex items-center rounded-full relative">
+    <div className="flex items-center rounded-full w-full px-8 relative">
       <Input
         onKeyDown={handleKeyDown}
         className="w-full p-2 text-black rounded-full"
         placeholder="Search for a Pokemon"
         onChange={(e) => setText(e.target.value)}
       />
-      <Button className="rounded-full absolute right-0 top-0" type="submit">
+      <Button className="rounded-full absolute right-8 top-0" type="submit">
         <MagnifyingGlassIcon className="w-4 h-4" />
       </Button>
     </div>

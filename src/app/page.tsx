@@ -2,10 +2,16 @@ import Chat from "@/components/chat/chat";
 import { AI } from "./actions";
 import PokemonList from "@/components/pokemonlist/pokemon-list";
 
-export default function Home() {
+type HomeProps = {
+  params: {
+    category: string;
+  };
+};
+
+export default function Home({ params }: HomeProps) {
   return (
-    <main className="flex flex-col">
-      <PokemonList />
+    <main className=" flex flex-col">
+      <PokemonList params={params} />
       <AI>
         <Chat />
       </AI>

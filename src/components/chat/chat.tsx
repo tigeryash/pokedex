@@ -30,8 +30,8 @@ const Chat = () => {
   useEffect(() => {
     if (open) {
       animate(scope.current, {
-        width: innerWidth > 800 ? 800 : innerWidth - 90,
-        height: innerHeight > 500 ? innerHeight - 200 : innerHeight * 0.1,
+        width: innerWidth > 800 ? 800 : innerWidth - innerWidth * 0.09,
+        height: innerHeight > 500 ? innerHeight - 200 : innerHeight,
         borderRadius: "1rem",
       });
     }
@@ -52,7 +52,7 @@ const Chat = () => {
         <TooltipTrigger asChild>
           <motion.div
             ref={scope}
-            className="absolute flex flex-col items-center justify-center text-white bottom-4 right-3
+            className="fixed flex flex-col items-center justify-center text-white bottom-4 right-3
              p-4 rounded-full bg-black"
           >
             {open ? (
