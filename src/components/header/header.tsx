@@ -20,9 +20,7 @@ const Header = () => {
 
   useEffect(() => {
     const headerScroll = () => {
-      const headerBottom = headerRef.current
-        ?.getBoundingClientRect()
-        .y.valueOf();
+      const headerBottom = headerRef.current?.getBoundingClientRect().bottom;
       const targetBottom = targetRef.current?.getBoundingClientRect().bottom;
 
       if (headerBottom && targetBottom && headerBottom <= targetBottom) {
