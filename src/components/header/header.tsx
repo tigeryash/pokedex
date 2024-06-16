@@ -41,14 +41,14 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="pt-16 ">
+    <header className={` w-full`}>
       <div
-        className={`fixed top-0 flex flex-col justify-between pt-4 w-full ${
+        className={` fixed flex flex-col justify-between pt-4 w-full ${
           isSticky ? "backdrop-blur-md" : "bg-white"
         } z-9999`}
         ref={triggerRef}
       >
-        <div className="flex flex-row w-full justify-between items-center pb-2 px-4">
+        <div className="flex top-0 flex-row w-full justify-between items-center pb-2 px-4">
           <motion.h1
             className="text-2xl font-semibold"
             ref={targetRef}
@@ -66,20 +66,12 @@ const Header = () => {
             </ul>
           </nav>
         </div>
-        <div
-          className={`w-full flex flex-col items-center space-y-4 ${
-            isSticky ? "visible" : "hidden"
-          }`}
-        >
-          <Search />
-          <Tags />
-        </div>
       </div>
 
-      <div className="flex flex-col justify-between items-center space-y-4 w-full">
+      <div className="pt-16 flex flex-col justify-between items-center space-y-4 w-full">
         <h1
           className={`text-2xl font-semibold ${
-            isSticky ? "invisible" : "visible"
+            isSticky ? "invisible pb-20" : "visible"
           }`}
           ref={headerRef}
         >
@@ -87,7 +79,7 @@ const Header = () => {
         </h1>
         <div
           className={`flex flex-col space-y-4 justify-center items-center w-full  ${
-            isSticky ? "invisible" : "visible"
+            isSticky ? "fixed top-10 backdrop-blur-md" : "relative"
           }`}
           ref={searchRef}
         >

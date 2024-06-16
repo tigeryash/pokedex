@@ -73,3 +73,15 @@ export const PokemonTypes = {
   fairy:
     "https://archives.bulbagarden.net/media/upload/c/c6/Fairy_icon_SwSh.png",
 };
+
+export const Regions = [
+  "Kanto",
+  "Johto",
+  "Hoenn",
+  "Sinnoh",
+  "Unova",
+  "Kalos",
+  "Alola",
+  "Galar",
+  "Paldea",
+];
