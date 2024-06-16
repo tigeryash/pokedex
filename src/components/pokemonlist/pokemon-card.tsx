@@ -50,8 +50,6 @@ const PokemonCard = ({ name }: { name: string }) => {
   if (pokemonData === undefined || pokemonData === null) {
     return null;
   } else {
-    console.log(pokemonData);
-
     return (
       <div
         className="bg-white  shadow-xl  py-3 px-2 rounded-md flex justify-between  border-t-4  border-b-4"

@@ -3,7 +3,7 @@
 import { Form, useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { FormControl, FormField, FormItem } from "../ui/form";
-import { useRef, useState } from "react";
+import { Ref, forwardRef, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "../ui/button";
@@ -15,7 +15,7 @@ const searchSchema = z.object({
   message: z.string().min(1),
 });
 
-const Search = () => {
+const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
   const router = useRouter();
   const [text, setText] = useState("");
   const [query] = useDebounce(text, 500);
@@ -44,7 +44,10 @@ const Search = () => {
   };
 
   return (
-    <div className="flex items-center rounded-full w-full px-8 relative">
+    <div
+      className="flex items-center rounded-full w-full px-8 relative"
+      ref={ref}
+    >
       <Input
         onKeyDown={handleKeyDown}
         className="w-full p-2 text-black rounded-full"
@@ -56,6 +59,8 @@ const Search = () => {
       </Button>
     </div>
   );
-};
+});
+
+Search.displayName = "Search";
 
 export default Search;
