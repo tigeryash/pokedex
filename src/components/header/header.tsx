@@ -3,9 +3,31 @@
 import React, { useEffect, useRef, useState } from "react";
 import Search from "./search";
 import Tags from "./tags";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 
-import { useScroll, useTransform, motion } from "framer-motion";
+import {
+  useScroll,
+  useTransform,
+  motion,
+  AnimatePresence,
+} from "framer-motion";
+import MenuLink from "./menu-link";
+import MobileMenu from "./mobile-menu";
+
+const menuLinks = [
+  {
+    label: "Pokemon",
+    href: "/",
+  },
+  {
+    label: "Items",
+    href: "/items",
+  },
+  {
+    label: "Moves",
+    href: "/moves",
+  },
+];
 
 const Header = () => {
   const targetRef = useRef<HTMLDivElement | null>(null);
@@ -13,6 +35,7 @@ const Header = () => {
   const searchRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: headerRef,
@@ -41,11 +64,11 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={` w-full`}>
+    <header className={` w-full `}>
       <div
         className={` fixed flex flex-col justify-between pt-4 w-full ${
           isSticky ? "backdrop-blur-md" : "bg-white"
-        } z-9999`}
+        } z-9`}
         ref={triggerRef}
       >
         <div className="flex top-0 flex-row w-full justify-between items-center pb-2 px-4">
@@ -57,12 +80,18 @@ const Header = () => {
             YashDex
           </motion.h1>
 
-          <HamburgerMenuIcon className="w-8 h-8 ml-auto md:hidden" />
+          <HamburgerMenuIcon
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="w-8 h-8 ml-auto md:hidden"
+          />
+
           <nav className="hidden md:flex ml-auto">
             <ul className="flex space-x-4">
-              <li>Pokemon</li>
-              <li>Items</li>
-              <li>Moves</li>
+              {menuLinks.map((link) => (
+                <li key={link.href}>
+                  <MenuLink label={link.label} href={link.href} />
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
@@ -87,6 +116,15 @@ const Header = () => {
           <Tags />
         </div>
       </div>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <MobileMenu
+            menuLinks={menuLinks}
+            setIsMenuOpen={setIsMenuOpen}
+            isMenuOpen={isMenuOpen}
+          />
+        )}
+      </AnimatePresence>
     </header>
   );
 };
