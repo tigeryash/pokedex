@@ -67,7 +67,7 @@ const Header = () => {
     <header className={` w-full `}>
       <div
         className={` fixed flex flex-col justify-between pt-4 w-full ${
-          isSticky ? "backdrop-blur-md" : "bg-white"
+          isSticky ? "backdrop-blur-md" : ""
         } z-9`}
         ref={triggerRef}
       >

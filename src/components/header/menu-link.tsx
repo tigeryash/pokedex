@@ -34,7 +34,7 @@ export default function MenuLink({
       initial="initial"
       animate="open"
       exit="initial"
-      className="text-4xl text-black"
+      className="text-4xl md:text-2xl "
     >
       <Link href={href}>{label}</Link>
     </motion.div>

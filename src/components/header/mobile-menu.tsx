@@ -8,6 +8,7 @@ import Image from "next/image";
 import solgaleo from "../../../public/solgaleo.png";
 import lunala from "../../../public/lunala.png";
 import useThemeStore from "@/stores/themestore";
+import { useTheme } from "next-themes";
 
 const MobileMenu = ({
   setIsMenuOpen,
@@ -18,8 +19,7 @@ const MobileMenu = ({
   isMenuOpen: boolean;
   menuLinks: { label: string; href: string }[];
 }) => {
-  const theme = useThemeStore((state) => state.theme);
-  const setTheme = useThemeStore((state) => state.setTheme);
+  const { setTheme, theme } = useTheme();
 
   const menuVars = {
     initial: {
@@ -86,7 +86,9 @@ const MobileMenu = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="fixed top-0 left-0 w-full h-full origin-top bg-white flex flex-col justify-center items-center z-20"
+      className="fixed top-0 left-0 w-full h-full origin-top  flex flex-col justify-center items-center z-20
+        bg-white dark:bg-gray-900
+      "
     >
       <div className="flex justify-end items-center w-full p-4">
         <motion.h1
@@ -149,7 +151,7 @@ const MobileMenu = ({
         initial="initial"
         animate="open"
         exit="initial"
-        className=" bg-white flex-1 flex flex-col justify-center items-center w-full space-y-4"
+        className="  flex-1 flex flex-col justify-center items-center w-full space-y-4"
       >
         {menuLinks.map((link) => (
           <div key={link.href} className="overflow-hidden">

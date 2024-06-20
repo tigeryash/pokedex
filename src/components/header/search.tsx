@@ -50,7 +50,7 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
     >
       <Input
         onKeyDown={handleKeyDown}
-        className="w-full p-2 text-black rounded-full"
+        className="w-full p-2 dark:text-[#e5da7f] rounded-full"
         placeholder="Search for a Pokemon"
         onChange={(e) => setText(e.target.value)}
       />

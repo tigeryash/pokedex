@@ -7,7 +7,10 @@ type ThemeStore = {
 
 const useThemeStore = create<ThemeStore>((set) => ({
   theme: "light",
-  setTheme: (theme: "light" | "dark") => set({ theme }),
+  setTheme: (theme: "light" | "dark") => {
+    set({ theme });
+    localStorage.setItem("theme", theme);
+  },
 }));
 
 export default useThemeStore;

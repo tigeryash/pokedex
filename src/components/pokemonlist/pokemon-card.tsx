@@ -52,7 +52,7 @@ const PokemonCard = ({ name }: { name: string }) => {
   } else {
     return (
       <div
-        className="bg-white  shadow-xl  py-3 px-2 rounded-md flex justify-between  border-t-4  border-b-4"
+        className="bg-[#FBF7EE] dark:bg-[#240E62]  shadow-xl  py-3 px-2 rounded-md flex justify-between  border-t-4  border-b-4"
         style={{
           // backgroundColor:
           //   PokemonTypesColorsRGBA[
@@ -95,7 +95,7 @@ const PokemonCard = ({ name }: { name: string }) => {
               {pokemonData.name}
             </h3>
 
-            <p className="text-right text-lg text-zinc-400">
+            <p className="text-right text-lg text-[#626262]">
               #{pokemonData.id}
             </p>
           </div>
