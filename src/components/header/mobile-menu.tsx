@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import solgaleo from "../../../public/solgaleo.png";
 import lunala from "../../../public/lunala.png";
-import useThemeStore from "@/stores/themestore";
 import { useTheme } from "next-themes";
 
 const MobileMenu = ({
