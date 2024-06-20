@@ -107,7 +107,7 @@ const Header = () => {
           YashDex
         </h1>
         <div
-          className={`flex flex-col space-y-4 justify-center items-center w-full  ${
+          className={`flex flex-col space-y-4 justify-center w-full  ${
             isSticky ? "fixed top-10 backdrop-blur-md" : "relative"
           }`}
           ref={searchRef}
