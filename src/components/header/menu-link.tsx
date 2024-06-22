@@ -24,9 +24,11 @@ const mobileLinkVars = {
 export default function MenuLink({
   label,
   href,
+  setIsMenuOpen,
 }: {
   label: string;
   href: string;
+  setIsMenuOpen: (isMenuOpen: boolean) => void;
 }) {
   return (
     <motion.div
@@ -36,7 +38,14 @@ export default function MenuLink({
       exit="initial"
       className="text-4xl md:text-2xl "
     >
-      <Link href={href}>{label}</Link>
+      <Link
+        href={href}
+        onClick={() => {
+          setIsMenuOpen(false);
+        }}
+      >
+        {label}
+      </Link>
     </motion.div>
   );
 }

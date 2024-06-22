@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatBubbleIcon } from "@radix-ui/react-icons";
+import { ChatBubbleIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { useEffect, useRef, useState } from "react";
 import {
   Tooltip,
@@ -52,19 +52,24 @@ const Chat = () => {
         <TooltipTrigger asChild>
           <motion.div
             ref={scope}
-            className="fixed flex flex-col items-center justify-center text-white bottom-4 right-3
-             p-4 rounded-full bg-black"
+            className="fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-3
+             p-4 rounded-full bg-[#C2C7C6] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F]"
           >
             {open ? (
               <>
                 <div className="flex justify-between items-center mb-2 w-full">
-                  <h2 className="text-lg font-semibold">Professor 🥸</h2>
-                  <button onClick={toggleOpen} className="text-lg">
-                    ✖️
+                  <h2 className="text-lg font-semibold text-[] dark:text-[#FEFEFE]">
+                    Professor 🥸
+                  </h2>
+                  <button
+                    onClick={toggleOpen}
+                    className="text-lg text-[#EE7318] dark:text-[#FEFEFE]"
+                  >
+                    <Cross1Icon className="w-6 h-6 text-[#EE7318] dark:text-[#FEFEFE]" />
                   </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-2 bg-slate-200 w-full rounded-lg text-black text-sm">
+                <div className="flex-1 overflow-y-auto p-2 bg-[#FBF7EE] dark:bg-[#45348E] w-full rounded-lg text-[#FBF7EE] dark:text-[#E5DA7F] text-sm">
                   {messages.map((msg: ClientMessage) => (
                     <div
                       key={msg.id}

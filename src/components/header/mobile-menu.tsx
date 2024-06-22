@@ -86,7 +86,7 @@ const MobileMenu = ({
       animate="animate"
       exit="exit"
       className="fixed top-0 left-0 w-full h-full origin-top  flex flex-col justify-center items-center z-20
-        bg-white dark:bg-gray-900
+        bg-white dark:bg-[#240E62]
       "
     >
       <div className="flex justify-end items-center w-full p-4">
@@ -154,7 +154,11 @@ const MobileMenu = ({
       >
         {menuLinks.map((link) => (
           <div key={link.href} className="overflow-hidden">
-            <MenuLink label={link.label} href={link.href} />
+            <MenuLink
+              label={link.label}
+              href={link.href}
+              setIsMenuOpen={setIsMenuOpen}
+            />
           </div>
         ))}
       </motion.div>

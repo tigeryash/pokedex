@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import pokemon from "../../lib/pokemon.json";
+import Link from "next/link";
+import Image from "next/image";
 
 const searchSchema = z.object({
   message: z.string().min(1),
@@ -98,7 +100,17 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
           ref={suggestionsRef}
         >
           {suggestions.map((suggestion) => (
-            <div key={suggestion}>{suggestion}</div>
+            <div className="flex items-center gap-2" key={suggestion}>
+              <Image
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                  pokemon[suggestion as keyof typeof pokemon]
+                }.png`}
+                alt={suggestion}
+                width={32}
+                height={32}
+              />
+              <Link href={`/pokemon?query=${suggestion}`}>{suggestion}</Link>
+            </div>
           ))}
         </div>
       )}

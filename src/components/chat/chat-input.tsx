@@ -65,7 +65,7 @@ const ChatInput = () => {
               <FormControl>
                 <Textarea
                   onKeyDown={handleKeyDown}
-                  className="w-full p-2 rounded-md text-black bg-white resize-y max-h-[206px]"
+                  className="w-full p-2 rounded-md text-[#313139] bg-[#FBF7EE] dark:text-[#FEFEFEda] dark:bg-[#45348E] resize-y max-h-[206px]"
                   placeholder="Type a message..."
                   {...field}
                 />
@@ -74,16 +74,19 @@ const ChatInput = () => {
             </FormItem>
           )}
         />
-        <div className="flex gap-2">
-          <Button className="flex-1 bg-blue-600">
-            <CameraIcon />
+        <div className="flex gap-2 ">
+          <Button className="flex-1 bg-[#52525A] dark:bg-[#E5DA7F]">
+            <CameraIcon className="dark:text-[#655C14]" />
           </Button>
-          <Button className="flex-1 bg-green-600">
-            <ImageIcon />
+          <Button className="flex-1 bg-[#52525A] dark:bg-[#E5DA7F]">
+            <ImageIcon className="dark:text-[#655C14]" />
           </Button>
         </div>
 
-        <Button className="w-full bg-slate-200 text-black" type="submit">
+        <Button
+          className="w-full bg-[#EFE85A] dark:bg-[#6046D8] text-[#313139] dark:text-[#FEFEFE]"
+          type="submit"
+        >
           Submit
         </Button>
       </form>

@@ -67,7 +67,7 @@ const Header = () => {
     <header className={` w-full `}>
       <div
         className={` fixed flex flex-col justify-between pt-4 w-full ${
-          isSticky ? "backdrop-blur-md" : ""
+          isSticky ? "backdrop-blur-md" : "bg-[#C2C7C6] dark:bg-gray-900"
         } z-9`}
         ref={triggerRef}
       >
@@ -89,7 +89,11 @@ const Header = () => {
             <ul className="flex space-x-4">
               {menuLinks.map((link) => (
                 <li key={link.href}>
-                  <MenuLink label={link.label} href={link.href} />
+                  <MenuLink
+                    label={link.label}
+                    href={link.href}
+                    setIsMenuOpen={setIsMenuOpen}
+                  />
                 </li>
               ))}
             </ul>
