@@ -34,8 +34,8 @@ const PokemonInfoCard = ({ pokemon }: { pokemon: any }) => {
               key={type.type.name}
               src={PokemonTypes[type.type.name as PokemonTypeKey]}
               alt={type.type.name}
-              width={20}
-              height={20}
+              width={600}
+              height={600}
               className="w-6 h-6 lg:w-12 lg:h-12"
             />
           ))}

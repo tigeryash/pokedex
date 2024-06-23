@@ -5,6 +5,8 @@ import Pokedex from "pokedex-promise-v2";
 import { z } from "zod";
 import PokemonInfoCard from "@/components/pokemonchat/pokemon-info-card";
 import { ReactNode } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export type ServerMessage = {
   role: "user" | "assistant";
@@ -39,25 +41,33 @@ export async function continueConversation(
           { role: "assistant", content },
         ]);
       }
-      return <div>{content}</div>;
+      return (
+        <ReactMarkdown
+          className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
+          remarkPlugins={[remarkGfm]}
+        >
+          {content}
+        </ReactMarkdown>
+      );
     },
     tools: {
       getPokemon: {
-        description: "Get information about a Pokemon",
+        description:
+          "Get information about a Pokemon when given a Pokemon name or a Pokemon ID",
         parameters: z.object({
-          name: z.string(),
+          name: z.string().or(z.number()),
         }),
         generate: async function* ({ name }) {
           yield <div>Loading...</div>;
           try {
             const pokemon = await P.getResource([
-              `/api/v2/pokemon/${name}`,
-              `/api/v2/pokemon-species/${name}`,
+              `/api/v2/pokemon/${name.toString().toLowerCase()}`,
+              `/api/v2/pokemon-species/${name.toString().toLowerCase()}`,
             ]);
             return <PokemonInfoCard pokemon={pokemon} />;
           } catch (error) {
             console.log(error);
-            return <div>{`Pokemon not found ${error}`}</div>;
+            return <div>{`Pokemon not found ${error} ${name}`}</div>;
           }
         },
       },
