@@ -5,39 +5,23 @@ import {
   PokemonTypesColors,
   PokemonTypesColorsRGBA,
 } from "@/lib/constants";
-import { PokemonType, PokemonTypeKey } from "@/types/pokemon-type";
+import { PokemonTypeKey } from "@/types/pokemon-type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Pokedex from "pokedex-promise-v2";
 import { useEffect, useState } from "react";
-const P = new Pokedex();
+import { Pokemon, PokemonClient } from "pokenode-ts";
 
 const PokemonCard = ({ name }: { name: string }) => {
-  const [pokemonData, setPokemonData] = useState<PokemonType | null>(null);
+  const [pokemonData, setPokemonData] = useState<Pokemon | null>(null);
   const router = useRouter();
 
   useEffect(() => {
+    const P = new PokemonClient();
     const getPokemon = async () => {
       try {
         const response = await P.getPokemonByName(name);
-        const pokemonTypeData: PokemonType = {
-          ...response,
-          past_abilities: response.past_abilities.map((pa) => ({
-            ability: pa.ability,
-            is_hidden: pa.is_hidden,
-            slot: pa.slot,
-          })),
-          past_types: response.past_types.map((pt) => ({
-            generation: parseInt(pt.generation.url.split("/").slice(-2, -1)[0]), // Extracting ID from URL and converting to number
-            types: pt.types.map((type) => ({
-              slot: type.slot,
-              name: type.type.name, // Adjusted to directly include name
-              url: type.type.url, // Adjusted to directly include url
-            })),
-          })),
-        };
 
-        setPokemonData(pokemonTypeData);
+        setPokemonData(response);
       } catch (error) {
         console.error("Failed to fetch pokemon data:", error);
         setPokemonData(null);
@@ -79,10 +63,10 @@ const PokemonCard = ({ name }: { name: string }) => {
       >
         <Image
           src={
-            pokemonData.sprites.other["official-artwork"].front_default ||
+            pokemonData?.sprites?.other?.["official-artwork"]?.front_default ||
             "/default-image.png"
           }
-          alt={pokemonData.name}
+          alt={pokemonData?.name}
           width={100}
           height={100}
         />

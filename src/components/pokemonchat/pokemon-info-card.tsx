@@ -80,7 +80,7 @@ const PokemonInfoCard = ({ pokemon }: { pokemon: any }) => {
             Next
           </button>
         </div>
-        <Link href={`/pokemon/${pokemon[0].id}`}>
+        <Link href={`/${pokemon[0].id}`}>
           <button className="underline text-blue-500 text-center w-full">
             View Pokemon
           </button>

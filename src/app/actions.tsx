@@ -1,12 +1,12 @@
 import { createAI, streamUI, getMutableAIState } from "ai/rsc";
 import { nanoid } from "ai";
 import { openai } from "@ai-sdk/openai";
-import Pokedex from "pokedex-promise-v2";
 import { z } from "zod";
 import PokemonInfoCard from "@/components/pokemonchat/pokemon-info-card";
 import { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { PokemonClient } from "pokenode-ts";
 
 export type ServerMessage = {
   role: "user" | "assistant";
@@ -24,7 +24,7 @@ export async function continueConversation(
 ): Promise<ClientMessage> {
   "use server";
 
-  const P = new Pokedex();
+  const P = new PokemonClient();
   const history = getMutableAIState();
 
   // Debugging the history object
@@ -60,10 +60,15 @@ export async function continueConversation(
         generate: async function* ({ name }) {
           yield <div>Loading...</div>;
           try {
-            const pokemon = await P.getResource([
-              `/api/v2/pokemon/${name.toString().toLowerCase()}`,
-              `/api/v2/pokemon-species/${name.toString().toLowerCase()}`,
-            ]);
+            const Pname =
+              typeof name === "string"
+                ? await P.getPokemonByName(name.toString().toLowerCase())
+                : await P.getPokemonById(name);
+            const species =
+              typeof name === "string"
+                ? await P.getPokemonSpeciesByName(name.toString().toLowerCase())
+                : await P.getPokemonSpeciesById(name);
+            const pokemon = [Pname, species];
             return <PokemonInfoCard pokemon={pokemon} />;
           } catch (error) {
             console.log(error);

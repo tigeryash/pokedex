@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Stat } from "@/types/pokemon-type";
+import { Stat } from "pokenode-ts";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
