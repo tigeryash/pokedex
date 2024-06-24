@@ -1,7 +1,7 @@
-import Pokedex from "pokedex-promise-v2";
 import PokemonCard from "./pokemon-card";
 import { Suspense } from "react";
 import CardSkeleton from "./card-skeleton";
+import { PokemonClient } from "pokenode-ts";
 
 type PageProps = {
   params: {
@@ -10,15 +10,10 @@ type PageProps = {
 };
 
 const PokemonList = async ({ params }: PageProps) => {
-  const P = new Pokedex();
-
-  const interval = {
-    limit: 10,
-    offset: 0,
-  };
+  const P = new PokemonClient();
 
   const getPokemonList = async () => {
-    const response = await P.getPokemonsList(interval);
+    const response = await P.listPokemons(0, 10);
     return response.results;
     //     const response = await fetch(query ? searchResult : categoryResult);
   };

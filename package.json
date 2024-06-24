@@ -25,7 +25,6 @@
     "framer-motion": "^11.2.10",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
-    "pokedex-promise-v2": "^4.2.0",
     "pokenode-ts": "^1.20.0",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",

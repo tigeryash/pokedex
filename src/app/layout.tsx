@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description: "Website for searching up anything POkemon related",
 };
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 export default function RootLayout({
   children,
 }: Readonly<{
