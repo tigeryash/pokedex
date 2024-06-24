@@ -11,12 +11,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Stat } from "pokenode-ts";
+import { PokemonStat } from "pokenode-ts";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 type StatChartProps = {
-  stats: Stat[];
+  stats: PokemonStat[];
 };
 
 const StatChart = ({ stats }: StatChartProps) => {
