@@ -7,12 +7,14 @@ import {
 } from "@/lib/constants";
 import { PokemonType, PokemonTypeKey } from "@/types/pokemon-type";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Pokedex from "pokedex-promise-v2";
 import { useEffect, useState } from "react";
 const P = new Pokedex();
 
 const PokemonCard = ({ name }: { name: string }) => {
   const [pokemonData, setPokemonData] = useState<PokemonType | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const getPokemon = async () => {
@@ -52,6 +54,9 @@ const PokemonCard = ({ name }: { name: string }) => {
   } else {
     return (
       <div
+        onClick={() => {
+          router.push(`/${pokemonData.id}`);
+        }}
         className="bg-[#FBF7EE] dark:bg-indigo-950 shadow-xl  py-3 px-2 rounded-md flex justify-between  border-t-4  border-b-4"
         style={{
           // backgroundColor:
