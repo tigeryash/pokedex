@@ -38,9 +38,6 @@ const PokemonCard = ({ name }: { name: string }) => {
   } else {
     return (
       <div
-        onClick={() => {
-          router.push(`/${pokemonData.id}`);
-        }}
         className="bg-[#FBF7EE] dark:bg-indigo-950 shadow-xl  py-3 px-2 rounded-md flex justify-between  border-t-4  border-b-4"
         style={{
           // backgroundColor:
@@ -69,10 +66,16 @@ const PokemonCard = ({ name }: { name: string }) => {
           alt={pokemonData?.name}
           width={100}
           height={100}
+          onClick={() => {
+            router.push(`/${pokemonData.id}`);
+          }}
         />
         <div className="flex flex-col justify-between">
           <div className="flex flex-col">
             <h3
+              onClick={() => {
+                router.push(`/${pokemonData.id}`);
+              }}
               className="text-2xl font-bold capitalize text-zinc-700"
               style={{
                 color:
