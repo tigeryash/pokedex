@@ -19,6 +19,8 @@ import { useActions, useUIState } from "ai/rsc";
 import { nanoid } from "ai";
 import webcamStore from "@/stores/webcamstore";
 import Image from "next/image";
+import { resizeFile } from "@/lib/utils";
+import fs from "fs";
 
 const ChatInput = () => {
   const { continueConversation } = useActions();
@@ -47,14 +49,53 @@ const ChatInput = () => {
 
   const onSubmit = async (data: TFormSchema) => {
     form.reset({ message: "" });
+
     setMessages((currConvo: ClientMessage[]) => [
       ...currConvo,
-      { id: nanoid(), role: "user", display: data.message },
+      {
+        id: nanoid(),
+        role: "user",
+        display: data.message,
+        image: camImage || undefined,
+      },
     ]);
-
-    const response = await continueConversation(data.message);
+    console.log(camImage);
+    let response;
+    if (camImage && typeof camImage === "string") {
+      response = await continueConversation({
+        role: "user",
+        content: [
+          { type: "user", text: data.message },
+          { type: "image", image: camImage },
+        ],
+      });
+    } else {
+      response = await continueConversation({
+        role: "user",
+        content: [{ type: "text", text: data.message }],
+      });
+    }
 
     setMessages((currConvo: ClientMessage[]) => [...currConvo, response]);
+
+    console.log("response");
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const resized = await convertToBase64(file);
+      setCamImage(resized);
+    }
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   return (
@@ -71,30 +112,31 @@ const ChatInput = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  {camImage ? (
-                    <div className="relative">
-                      <Image
-                        src={camImage}
-                        alt="webcam"
-                        width={512}
-                        height={512}
-                        className="rounded-lg"
-                      />
-                      <Button
-                        className="absolute top-2 right-2"
-                        onClick={() => setCamImage(null)}
-                      >
-                        <Cross1Icon className="w-2 h-2" />
-                      </Button>
-                    </div>
-                  ) : (
+                  <>
+                    {camImage && (
+                      <div className="relative">
+                        <Image
+                          src={camImage}
+                          alt="webcam"
+                          width={128}
+                          height={128}
+                          className="rounded-lg"
+                        />
+                        <Button
+                          className="absolute top-1 left-[5.7rem] p-3 hover:bg-red-500"
+                          onClick={() => setCamImage(null)}
+                        >
+                          <Cross1Icon className="w-2 h-2" />
+                        </Button>
+                      </div>
+                    )}
                     <Textarea
                       onKeyDown={handleKeyDown}
                       className="w-full p-2 rounded-md text-[#313139] bg-[#FBF7EE] dark:text-[#FEFEFEda] dark:bg-[#45348E] resize-y max-h-[206px]"
                       placeholder="Type a message..."
                       {...field}
                     />
-                  )}
+                  </>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -107,9 +149,19 @@ const ChatInput = () => {
             >
               <CameraIcon className="dark:text-[#655C14]" />
             </Button>
-            <Button className="flex-1 bg-[#52525A] dark:bg-[#E5DA7F]">
+            <Button
+              className="flex-1 bg-[#52525A] dark:bg-[#E5DA7F]"
+              onClick={() => document.getElementById("fileInput")?.click()}
+            >
               <ImageIcon className="dark:text-[#655C14]" />
             </Button>
+            <input
+              type="file"
+              className="hidden"
+              accept="image/jpeg, image/png, image/jpg"
+              id="fileInput"
+              onChange={handleImageUpload}
+            />
           </div>
 
           <Button

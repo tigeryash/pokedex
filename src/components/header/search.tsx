@@ -57,7 +57,7 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
     if (e.key === "Enter" && text.length > 0) {
       e.preventDefault();
       if (!e.shiftKey) {
-        router.push(`/pokemon?query=${query}`);
+        router.push(`/${query}`);
       }
     }
   };
@@ -109,7 +109,9 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
                 width={32}
                 height={32}
               />
-              <Link href={`/pokemon?query=${suggestion}`}>{suggestion}</Link>
+              <Link href={`/${suggestion}`} className="capitalize">
+                {suggestion}
+              </Link>
             </div>
           ))}
         </div>

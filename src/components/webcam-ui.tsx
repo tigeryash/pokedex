@@ -4,7 +4,7 @@ import Webcam from "react-webcam";
 import { useRef, useCallback, useEffect } from "react";
 import webcamStore from "@/stores/webcamstore";
 import { CameraIcon, Cross1Icon } from "@radix-ui/react-icons";
-import Resizer from "react-image-file-resizer";
+import { resizeFile } from "@/lib/utils";
 
 const videoConstraints = {
   width: 720,
@@ -18,6 +18,7 @@ const WebcamUi = () => {
   const setCamImage = webcamStore((state) => state.setCamImage);
   const webcamRef = useRef<Webcam>(null);
   const camRef = useRef<HTMLDivElement>(null);
+
   const capture = useCallback(async () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
@@ -45,22 +46,6 @@ const WebcamUi = () => {
       document.body.classList.remove("no-scroll");
     };
   }, [camRef, setShowWebCam, showWebCam]);
-
-  const resizeFile = (file: Blob): Promise<string> =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        512,
-        512,
-        "JPEG",
-        100,
-        0,
-        (uri) => {
-          resolve(uri as string);
-        },
-        "base64"
-      );
-    });
 
   return (
     <div className=" fixed top-0 h-screen w-full flex flex-col justify-center items-center bg-black/80 p-2">

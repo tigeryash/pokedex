@@ -7,20 +7,29 @@ import { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PokemonClient } from "pokenode-ts";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus as dark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+export type MessageContent = {
+  type: "text" | "image";
+  text?: string;
+  image?: string;
+};
 
 export type ServerMessage = {
   role: "user" | "assistant";
-  content: string;
+  content: MessageContent[];
 };
 
 export type ClientMessage = {
   id: string;
   role: "user" | "assistant";
   display: ReactNode;
+  image?: string;
 };
 
 export async function continueConversation(
-  message: string
+  message: ServerMessage
 ): Promise<ClientMessage> {
   "use server";
 
@@ -32,8 +41,11 @@ export async function continueConversation(
   const result = await streamUI({
     model: openai("gpt-4o"),
     system: `You are a Pokemon Professor. You only answer questions 
-      relating to Pokemon. You go by the name The Professor. You are used on a Pokedex app.`,
-    messages: [...history.get(), { role: "user", content: message }],
+      relating to Pokemon. You go by the name The Professor. You are used on a Pokedex app. 
+      If a user sends an image figure out what the Pokemon is. If the image doesn't contain a real 
+      Pokemon tell them that it is not a Pokemon. Make sure you are also considering newer Pokemon
+      releases.`,
+    messages: [...history.get(), message],
     text: ({ content, done }) => {
       if (done) {
         history.done((messages: ServerMessage[]) => [
@@ -45,6 +57,26 @@ export async function continueConversation(
         <ReactMarkdown
           className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
           remarkPlugins={[remarkGfm]}
+          components={{
+            code(props) {
+              const { children, className, node, ...rest } = props;
+              const match = /language-(\w+)/.exec(className || "");
+              return match ? (
+                <SyntaxHighlighter
+                  PreTag="div"
+                  children={String(children).replace(/\n$/, "")}
+                  language={match[1]}
+                  style={dark}
+                  wrapLines={true}
+                  wrapLongLines={true}
+                />
+              ) : (
+                <code {...rest} className={className}>
+                  {children}
+                </code>
+              );
+            },
+          }}
         >
           {content}
         </ReactMarkdown>
@@ -62,11 +94,11 @@ export async function continueConversation(
           try {
             const Pname =
               typeof name === "string"
-                ? await P.getPokemonByName(name.toString().toLowerCase())
+                ? await P.getPokemonByName(name.toLowerCase())
                 : await P.getPokemonById(name);
             const species =
               typeof name === "string"
-                ? await P.getPokemonSpeciesByName(name.toString().toLowerCase())
+                ? await P.getPokemonSpeciesByName(name.toLowerCase())
                 : await P.getPokemonSpeciesById(name);
             const pokemon = [Pname, species];
             return <PokemonInfoCard pokemon={pokemon} />;
