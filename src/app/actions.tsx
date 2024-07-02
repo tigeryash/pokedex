@@ -32,6 +32,7 @@ export async function continueConversation(
   message: ServerMessage
 ): Promise<ClientMessage> {
   "use server";
+  console.log("Message in continueConversation:", message);
 
   const P = new PokemonClient();
   const history = getMutableAIState();

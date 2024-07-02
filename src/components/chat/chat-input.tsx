@@ -20,7 +20,6 @@ import { nanoid } from "ai";
 import webcamStore from "@/stores/webcamstore";
 import Image from "next/image";
 import { resizeFile } from "@/lib/utils";
-import fs from "fs";
 
 const ChatInput = () => {
   const { continueConversation } = useActions();
@@ -59,14 +58,16 @@ const ChatInput = () => {
         image: camImage || undefined,
       },
     ]);
-    console.log(camImage);
+    console.log("camImage in onSubmit:", camImage); // Add this line
+
     let response;
     if (camImage && typeof camImage === "string") {
+      const base64Image = camImage.split(",")[1];
       response = await continueConversation({
         role: "user",
         content: [
-          { type: "user", text: data.message },
-          { type: "image", image: camImage },
+          { type: "text", text: data.message },
+          { type: "image", image: base64Image },
         ],
       });
     } else {
@@ -77,15 +78,13 @@ const ChatInput = () => {
     }
 
     setMessages((currConvo: ClientMessage[]) => [...currConvo, response]);
-
-    console.log("response");
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const resized = await convertToBase64(file);
-      setCamImage(resized);
+      const base64Image = await resizeFile(file);
+      setCamImage(base64Image);
     }
   };
 
@@ -97,7 +96,6 @@ const ChatInput = () => {
       reader.onerror = (error) => reject(error);
     });
   };
-
   return (
     <>
       <Form {...form}>
