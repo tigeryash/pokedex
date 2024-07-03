@@ -14,6 +14,7 @@ import { useUIState } from "ai/rsc";
 import { ClientMessage } from "@/app/actions";
 import webcamStore from "@/stores/webcamstore";
 import WebcamUi from "../webcam-ui";
+import Image from "next/image";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -58,7 +59,7 @@ const Chat = () => {
             <motion.div
               ref={scope}
               className="fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-3
-             p-4 rounded-full bg-[#C2C7C6] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F]"
+             p-4 rounded-full bg-[#C2C7C6] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden"
             >
               {open ? (
                 <>
@@ -80,12 +81,24 @@ const Chat = () => {
                         key={msg.id}
                         className={`chat ${
                           msg.role === "user" ? "chat-end" : "chat-start"
-                        }`}
+                        } flex flex-col space-y-2`}
                       >
                         <div className="chat-header">
                           {msg.role === "user" ? "Trainer" : "Professor"}
                         </div>
-                        <div className="chat-bubble">{msg.display}</div>
+                        <div className="chat-bubble">
+                          {msg.display}
+
+                          {msg.image && (
+                            <Image
+                              src={msg.image}
+                              alt="user image"
+                              width={200}
+                              height={200}
+                              className="rounded-lg  mt-2"
+                            />
+                          )}
+                        </div>
                       </div>
                     ))}
 
@@ -112,7 +125,7 @@ const Chat = () => {
           </TooltipTrigger>
 
           <TooltipContent>
-            <p>Ask Proffesor</p>
+            <p className="hidden md:block">Ask Proffesor</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

@@ -12,7 +12,7 @@ import {
 import { TFormSchema, formSchema } from "@/types/message-type";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { CameraIcon, Cross1Icon, ImageIcon } from "@radix-ui/react-icons";
 import { ClientMessage } from "@/app/actions";
 import { useActions, useUIState } from "ai/rsc";
@@ -46,7 +46,18 @@ const ChatInput = () => {
     }
   };
 
+  useEffect(() => {
+    if (camImage) {
+      form.setValue(
+        "message",
+        "If there is a Pokemon in this image could you tell me who this Pokemon is?"
+      );
+    }
+  }, [camImage, form]);
+
   const onSubmit = async (data: TFormSchema) => {
+    console.log("Form submitted with data:", data); // Add this line
+    console.log("camImage:", camImage);
     form.reset({ message: "" });
 
     setMessages((currConvo: ClientMessage[]) => [
@@ -58,7 +69,6 @@ const ChatInput = () => {
         image: camImage || undefined,
       },
     ]);
-    console.log("camImage in onSubmit:", camImage); // Add this line
 
     let response;
     if (camImage && typeof camImage === "string") {
@@ -66,7 +76,10 @@ const ChatInput = () => {
       response = await continueConversation({
         role: "user",
         content: [
-          { type: "text", text: data.message },
+          {
+            type: "text",
+            text: data.message,
+          },
           { type: "image", image: base64Image },
         ],
       });
@@ -78,6 +91,7 @@ const ChatInput = () => {
     }
 
     setMessages((currConvo: ClientMessage[]) => [...currConvo, response]);
+    setCamImage(null);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,14 +102,6 @@ const ChatInput = () => {
     }
   };
 
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
   return (
     <>
       <Form {...form}>
@@ -111,7 +117,7 @@ const ChatInput = () => {
               <FormItem>
                 <FormControl>
                   <>
-                    {camImage && (
+                    {camImage ? (
                       <div className="relative">
                         <Image
                           src={camImage}
@@ -122,21 +128,28 @@ const ChatInput = () => {
                         />
                         <Button
                           className="absolute top-1 left-[5.7rem] p-3 hover:bg-red-500"
-                          onClick={() => setCamImage(null)}
+                          onClick={() => {
+                            setCamImage(null);
+                            form.setValue("message", "");
+                          }}
                         >
                           <Cross1Icon className="w-2 h-2" />
                         </Button>
+                        <p className="text-[#313139] dark:text-[#FEFEFE] text-sm">
+                          Ask the Professor about this image?
+                        </p>
                       </div>
+                    ) : (
+                      <Textarea
+                        onKeyDown={handleKeyDown}
+                        className="w-full p-2 rounded-md text-[#313139] bg-[#FBF7EE] dark:text-[#FEFEFEda] dark:bg-[#45348E] resize-y max-h-[206px]"
+                        placeholder="Type a message..."
+                        {...field}
+                      />
                     )}
-                    <Textarea
-                      onKeyDown={handleKeyDown}
-                      className="w-full p-2 rounded-md text-[#313139] bg-[#FBF7EE] dark:text-[#FEFEFEda] dark:bg-[#45348E] resize-y max-h-[206px]"
-                      placeholder="Type a message..."
-                      {...field}
-                    />
                   </>
                 </FormControl>
-                <FormMessage />
+                {!camImage && <FormMessage />}
               </FormItem>
             )}
           />

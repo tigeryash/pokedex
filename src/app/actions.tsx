@@ -32,7 +32,6 @@ export async function continueConversation(
   message: ServerMessage
 ): Promise<ClientMessage> {
   "use server";
-  console.log("Message in continueConversation:", message);
 
   const P = new PokemonClient();
   const history = getMutableAIState();
@@ -65,12 +64,13 @@ export async function continueConversation(
               return match ? (
                 <SyntaxHighlighter
                   PreTag="div"
-                  children={String(children).replace(/\n$/, "")}
                   language={match[1]}
                   style={dark}
                   wrapLines={true}
                   wrapLongLines={true}
-                />
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
               ) : (
                 <code {...rest} className={className}>
                   {children}
