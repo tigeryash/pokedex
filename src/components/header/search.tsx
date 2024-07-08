@@ -90,7 +90,7 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
       <Input
         ref={inputRef}
         onKeyDown={handleKeyDown}
-        className="w-full p-2 dark:text-[#e5da7f] rounded-full"
+        className="w-full p-2 dark:text-[#e5da7f] rounded-full focus:bg-[#C2C7C6] dark:focus:bg-gray-900"
         placeholder="Search for a Pokemon"
         onChange={handleChange}
       />
@@ -109,7 +109,10 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
                 width={32}
                 height={32}
               />
-              <Link href={`/${suggestion}`} className="capitalize">
+              <Link
+                href={`/${pokemon[suggestion as keyof typeof pokemon]}`}
+                className="capitalize"
+              >
                 {suggestion}
               </Link>
             </div>

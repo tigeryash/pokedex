@@ -124,9 +124,11 @@ const Chat = () => {
             </motion.div>
           </TooltipTrigger>
 
-          <TooltipContent>
-            <p className="hidden md:block">Ask Proffesor</p>
-          </TooltipContent>
+          {!open && (
+            <TooltipContent>
+              <p className="hidden md:block">Ask Proffesor</p>
+            </TooltipContent>
+          )}
         </Tooltip>
       </TooltipProvider>
 

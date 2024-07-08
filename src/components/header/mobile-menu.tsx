@@ -85,7 +85,7 @@ const MobileMenu = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="fixed top-0 left-0 w-full h-full origin-top  flex flex-col justify-center items-center z-20
+      className="fixed top-0 left-0 w-full min-h-screen origin-top  flex flex-col justify-center items-center z-20
         bg-white dark:bg-[#240E62]
       "
     >

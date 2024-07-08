@@ -38,7 +38,7 @@ const PokemonCard = ({ name }: { name: string }) => {
   } else {
     return (
       <div
-        className="bg-[#FBF7EE] dark:bg-indigo-950 shadow-xl  py-3 px-2 rounded-md flex justify-between  border-t-4  border-b-4"
+        className="bg-[#FBF7EE] dark:bg-indigo-950 shadow-xl  py-3 sm:px-2 md:px-0 rounded-md flex md:flex-col justify-between relative border-t-4  border-b-4"
         style={{
           // backgroundColor:
           //   PokemonTypesColorsRGBA[
@@ -64,19 +64,20 @@ const PokemonCard = ({ name }: { name: string }) => {
             "/default-image.png"
           }
           alt={pokemonData?.name}
-          width={100}
-          height={100}
+          width={250}
+          height={250}
           onClick={() => {
             router.push(`/${pokemonData.id}`);
           }}
+          className="h-auto w-[100px] sm:w-[150px] md:w-[150px] lg:w-[200px] xl:w-[250px] 2xl:w-[300px] md:px-2"
         />
-        <div className="flex flex-col justify-between">
-          <div className="flex flex-col">
+        <div className="flex flex-col lg:flex-row justify-between md:border-t border-gray-600 px-2">
+          <div className="flex flex-col ">
             <h3
               onClick={() => {
                 router.push(`/${pokemonData.id}`);
               }}
-              className="text-2xl font-bold capitalize text-zinc-700"
+              className="text-2xl sm:text-4xl md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl font-bold capitalize text-zinc-700"
               style={{
                 color:
                   PokemonTypesColors[
@@ -87,20 +88,20 @@ const PokemonCard = ({ name }: { name: string }) => {
               {pokemonData.name}
             </h3>
 
-            <p className="text-right text-lg text-[#626262]">
+            <p className="text-right md:text-left text-lg sm:text-3xl md:text-lg lg:text-xl xl:text-2xl  text-slate-300">
               #{pokemonData.id}
             </p>
           </div>
 
-          <div className="gap-2 flex justify-end">
+          <div className="gap-2 flex justify-end md:absolute md:bottom-4 md:right-2 lg:flex  lg:items-center">
             {pokemonData.types.map((type: any) => (
               <Image
                 key={type.type.name}
                 src={PokemonTypes[type.type.name as PokemonTypeKey]}
                 alt={type.type.name}
-                width={30}
-                height={30}
-                className="w-8 h-8 lg:w-12 lg:h-12"
+                width={96}
+                height={96}
+                className="w-8 h-8 sm:w-10 sm:h-10 md:w-5 md:h-5 lg:w-8 lg:h-8 xl:w-10 xl:h-10"
               />
             ))}
           </div>

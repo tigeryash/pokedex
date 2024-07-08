@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-[#C2C7C6] dark:bg-gray-900",
+          "min-h-screen bg-[#C2C7C6] dark:bg-gray-900 ",
           inter.className
         )}
       >
@@ -34,7 +34,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
           {children}
         </ThemeProvider>
       </body>
