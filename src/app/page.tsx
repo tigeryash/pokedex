@@ -2,7 +2,6 @@ import Chat from "@/components/chat/chat";
 import { AI } from "./actions";
 import PokemonList from "@/components/pokemonlist/pokemon-list";
 import Header from "@/components/header/header";
-import IntroSection from "@/components/intro/intro-section";
 
 type HomeProps = {
   params: {
