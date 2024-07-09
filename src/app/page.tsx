@@ -18,7 +18,7 @@ export default function Home({ params }: HomeProps) {
       <Header />
 
       <main className=" flex flex-col pt-[10px]">
-        <PokemonList params={params} />
+        <PokemonList />
         <ThemeToggle />
         <AI>
           <Chat />
