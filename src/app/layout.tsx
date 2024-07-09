@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-[#C2C7C6] dark:bg-gray-900 ",
+          "min-h-screen bg-[#DBE1EA] dark:bg-gray-900 ",
           inter.className
         )}
       >

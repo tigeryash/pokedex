@@ -33,6 +33,7 @@ const Header = () => {
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: headerRef,
@@ -65,7 +66,7 @@ const Header = () => {
       <header className={` w-full z-[9999] fixed top-0 backdrop-blur-md`}>
         <div
           className={`  flex flex-col justify-between pt-4 w-full ${
-            isSticky ? "" : "bg-[#C2C7C6] dark:bg-gray-900"
+            isSticky ? "" : "bg-[#DBE1EA] dark:bg-gray-900"
           } z-9`}
           ref={triggerRef}
         >

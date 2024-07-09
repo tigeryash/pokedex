@@ -5,10 +5,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PokemonTypes, Regions } from "@/lib/constants";
 import Image from "next/image";
+import { usePokemonStore } from "@/stores/pokemonstore";
 
 const Tags = () => {
-  const [clicked, setClicked] = useState(false);
-
+  const { tagsClicked, setTagsClicked } = usePokemonStore();
   const variants = {
     open: { opacity: 1, maxHeight: 600 }, // Adjust maxHeight to fit content
     collapsed: { opacity: 0, maxHeight: 0 },
@@ -19,7 +19,7 @@ const Tags = () => {
       <AnimatePresence>
         <motion.div
           initial="collapsed"
-          animate={clicked ? "open" : "collapsed"}
+          animate={tagsClicked ? "open" : "collapsed"}
           exit="collapsed"
           variants={variants}
           transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -88,9 +88,12 @@ const Tags = () => {
       </AnimatePresence>
       <ChevronDownIcon
         style={{
-          transform: clicked ? "rotate(180deg)" : "rotate(0deg)",
+          transform: tagsClicked ? "rotate(180deg)" : "rotate(0deg)",
         }}
-        onClick={() => setClicked((prev) => !prev)}
+        onClick={() => {
+          const temp = tagsClicked;
+          setTagsClicked(!temp);
+        }}
         className="w-6 h-6  cursor-pointer transition-transform duration-300 mx-auto"
       />
     </div>

@@ -90,24 +90,30 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
       <Input
         ref={inputRef}
         onKeyDown={handleKeyDown}
-        className="w-full p-2 dark:text-[#e5da7f] rounded-full focus:bg-[#C2C7C6] dark:focus:bg-gray-900"
+        className="w-full p-2 dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE]  dark:focus:bg-gray-900"
         placeholder="Search for a Pokemon"
         onChange={handleChange}
       />
       {suggestions.length > 0 && text.length > 0 && (
         <div
-          className="absolute top-10 max-h-56 bg-[#1e1e1e] left-auto w-[75%] sm:w-[90%] md:w-[90%] overflow-y-auto z-20 right-auto p-2 rounded-md"
+          className="absolute top-10 max-h-[500px] bg-[#FBF7EE] border-2 border-[#0dade8] dark:border-[#fafcfd]  dark:bg-[#1e1e1e] left-auto w-[75%] sm:w-[90%] md:w-[90%] overflow-y-auto z-20 right-auto rounded-md"
           ref={suggestionsRef}
         >
-          {suggestions.map((suggestion) => (
-            <div className="flex items-center gap-2" key={suggestion}>
+          {suggestions.map((suggestion, idx) => (
+            <div
+              className={`flex items-center gap-2  dark:border-[#E5DA7F] ${
+                idx % 2 === 0 ? "bg-[#C2C7C6] dark:bg-[#45348E]" : ""
+              }`}
+              key={suggestion}
+            >
               <Image
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
                   pokemon[suggestion as keyof typeof pokemon]
                 }.png`}
                 alt={suggestion}
-                width={32}
-                height={32}
+                width={72}
+                height={72}
+                className="w-16 h-16"
               />
               <Link
                 href={`/${pokemon[suggestion as keyof typeof pokemon]}`}

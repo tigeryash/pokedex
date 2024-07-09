@@ -153,18 +153,18 @@ const ChatInput = () => {
               </FormItem>
             )}
           />
-          <div className="flex gap-2 ">
+          <div className="flex gap-2 dark:text-[#E5DA7F]">
             <Button
-              className="flex-1 bg-[#52525A] dark:bg-[#E5DA7F]"
+              className="flex-1 bg-[#164b96]  dark:bg-[#E5DA7F]"
               onClick={() => setShowWebCam(true)}
             >
-              <CameraIcon className="dark:text-[#655C14]" />
+              <CameraIcon className="dark:text-[#655C14] text-[#fff]" />
             </Button>
             <Button
-              className="flex-1 bg-[#52525A] dark:bg-[#E5DA7F]"
+              className="flex-1 bg-[#164b96] dark:bg-[#E5DA7F]"
               onClick={() => document.getElementById("fileInput")?.click()}
             >
-              <ImageIcon className="dark:text-[#655C14]" />
+              <ImageIcon className="dark:text-[#655C14] text-[#fff]" />
             </Button>
             <input
               type="file"

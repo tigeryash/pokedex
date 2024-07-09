@@ -59,7 +59,7 @@ const Chat = () => {
             <motion.div
               ref={scope}
               className="fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-3
-             p-4 rounded-full bg-[#C2C7C6] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden"
+             p-4 rounded-full bg-[#FBF7EE] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden"
             >
               {open ? (
                 <>
@@ -75,7 +75,7 @@ const Chat = () => {
                     </button>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-2 bg-[#FBF7EE] dark:bg-[#45348E] w-full rounded-lg text-[#FBF7EE] dark:text-[#E5DA7F] text-sm">
+                  <div className="flex-1 overflow-y-auto p-2 bg-[#C2C7C6] dark:bg-[#45348E] w-full rounded-lg text-[#FBF7EE] dark:text-[#E5DA7F] text-sm">
                     {messages.map((msg: ClientMessage) => (
                       <div
                         key={msg.id}
@@ -126,7 +126,7 @@ const Chat = () => {
 
           {!open && (
             <TooltipContent>
-              <p className="hidden md:block">Ask Proffesor</p>
+              <p className="hidden md:block">Chat with The Proffesor</p>
             </TooltipContent>
           )}
         </Tooltip>

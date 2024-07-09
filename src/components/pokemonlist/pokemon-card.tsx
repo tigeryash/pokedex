@@ -1,52 +1,59 @@
 "use client";
 
-import {
-  PokemonTypes,
-  PokemonTypesColors,
-  PokemonTypesColorsRGBA,
-} from "@/lib/constants";
+import { PokemonTypes, PokemonTypesColors } from "@/lib/constants";
 import { PokemonTypeKey } from "@/types/pokemon-type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Pokemon, PokemonClient } from "pokenode-ts";
+import { Pokemon } from "pokenode-ts";
+import { motion } from "framer-motion";
 
 const PokemonCard = ({ name }: { name: string }) => {
   const [pokemonData, setPokemonData] = useState<Pokemon | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const P = new PokemonClient();
     const getPokemon = async () => {
       try {
-        const response = await P.getPokemonByName(name);
+        const response = await fetch(`/api/pokemon/name?name=${name}`, {
+          method: "GET",
+        });
+        const data = await response.json();
 
-        setPokemonData(response);
+        setPokemonData(data.response);
       } catch (error) {
         console.error("Failed to fetch pokemon data:", error);
-        setPokemonData(null);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
 
     getPokemon();
   }, [name]);
 
-  if (!pokemonData) return null;
-
-  if (pokemonData === undefined || pokemonData === null) {
-    return null;
-  } else {
+  if (loading) {
     return (
-      <div
+      <div className="skeleton w-full h-24 shadow-lg rounded-xl bg-gray-700"></div>
+    );
+  }
+
+  if (error || !pokemonData) {
+    return <div>Error loading Pokémon data. Please try again later.</div>;
+  }
+  if (pokemonData) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         className="bg-[#FBF7EE] dark:bg-indigo-950 shadow-xl  py-3 sm:px-2 md:px-0 rounded-md flex md:flex-col justify-between relative border-t-4  border-b-4"
         style={{
-          // backgroundColor:
-          //   PokemonTypesColorsRGBA[
-          //     pokemonData.types[0].type.name as PokemonTypeKey
-          //   ],
           borderTopColor:
             PokemonTypesColors[
-              pokemonData.types[0].type.name as PokemonTypeKey
+              pokemonData.types?.[0]?.type.name as PokemonTypeKey
             ],
           borderBottomColor:
             pokemonData.types.length > 1
@@ -106,7 +113,7 @@ const PokemonCard = ({ name }: { name: string }) => {
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 };

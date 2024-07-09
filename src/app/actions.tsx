@@ -1,3 +1,5 @@
+"use server";
+
 import { createAI, streamUI, getMutableAIState } from "ai/rsc";
 import { nanoid } from "ai";
 import { openai } from "@ai-sdk/openai";
@@ -28,12 +30,11 @@ export type ClientMessage = {
   image?: string;
 };
 
+const P = new PokemonClient();
+
 export async function continueConversation(
   message: ServerMessage
 ): Promise<ClientMessage> {
-  "use server";
-
-  const P = new PokemonClient();
   const history = getMutableAIState();
 
   // Debugging the history object
@@ -126,3 +127,8 @@ export const AI = createAI<ServerMessage[], ClientMessage[]>({
     continueConversation,
   },
 });
+
+export async function fetchPokemon({ page = 1 }: { page: number }) {
+  const pokemon = await P.listPokemons((page - 1) * 50, 50);
+  return pokemon;
+}
