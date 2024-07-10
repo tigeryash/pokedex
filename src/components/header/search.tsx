@@ -90,7 +90,7 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
       <Input
         ref={inputRef}
         onKeyDown={handleKeyDown}
-        className="w-full p-2 dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE]  dark:focus:bg-gray-900"
+        className="w-full p-2 dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE]   dark:focus:bg-gray-900"
         placeholder="Search for a Pokemon"
         onChange={handleChange}
       />

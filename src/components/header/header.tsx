@@ -79,7 +79,7 @@ const Header = () => {
   return (
     <>
       {isSticky && (
-        <div className="fixed top-0 h-[132px] w-full backdrop-blur-md z-[999]"></div>
+        <div className="fixed top-0 h-[132px] w-full backdrop-blur-md z-[9]"></div>
       )}
       <header className={` w-full z-[9999] fixed top-0 `}>
         <div
@@ -144,7 +144,7 @@ const Header = () => {
         </h1>
       </div>
       <div
-        className={`flex flex-col space-y-4 justify-center w-full z-[9999] ${
+        className={`flex flex-col space-y-4 justify-center w-full z-[10] ${
           isSticky ? "fixed top-14" : "relative"
         }`}
         ref={searchRef}
