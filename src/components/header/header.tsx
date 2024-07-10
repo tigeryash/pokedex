@@ -10,6 +10,8 @@ import MobileMenu from "./mobile-menu";
 import Search from "../header/search";
 import Tags from "../header/tags";
 import { useScroll } from "framer-motion";
+import { usePokemonStore } from "@/stores/pokemonstore";
+import { useInView } from "react-intersection-observer";
 
 const menuLinks = [
   {
@@ -29,11 +31,13 @@ const menuLinks = [
 const Header = () => {
   const targetRef = useRef<HTMLDivElement | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const searchRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLDivElement | null>(null);
-  const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement | null>(null);
   const [clicked, setClicked] = useState(false);
+  const [reverse, setReverse] = useState(0);
+  const isSticky = usePokemonStore((state) => state.isSticky);
+  const setIsSticky = usePokemonStore((state) => state.setIsSticky);
 
   const { scrollYProgress } = useScroll({
     target: headerRef,
@@ -44,26 +48,40 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const threshold = window.innerHeight * 0.07; // 7% of the viewport height
+      if (triggerRef.current && searchRef.current && headerRef.current) {
+        const headerRect = triggerRef.current.getBoundingClientRect();
+        const searchRect = searchRef.current.getBoundingClientRect();
+        const h1Rect = headerRef.current.getBoundingClientRect();
 
-      if (scrollY > threshold) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
+        if (searchRect.top <= headerRect.bottom) {
+          setIsSticky(true);
+          setReverse(h1Rect.top);
+          console.log("sticky");
+        } else {
+          setIsSticky(false);
+          console.log("not sticky");
+        }
+
+        if (isSticky && h1Rect.top > reverse) {
+          setIsSticky(false);
+        }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [setIsSticky, reverse, isSticky]);
 
   return (
     <>
-      <header className={` w-full z-[9999] fixed top-0 backdrop-blur-md`}>
+      {isSticky && (
+        <div className="fixed top-0 h-[132px] w-full backdrop-blur-md z-[999]"></div>
+      )}
+      <header className={` w-full z-[9999] fixed top-0 `}>
         <div
           className={`  flex flex-col justify-between pt-4 w-full ${
             isSticky ? "" : "bg-[#DBE1EA] dark:bg-gray-900"
@@ -99,14 +117,6 @@ const Header = () => {
               </ul>
             </nav>
           </div>
-          <div
-            className={`flex flex-col justify-center items-center ${
-              isSticky ? "visible" : "hidden"
-            }`}
-          >
-            <Search />
-            <Tags />
-          </div>
         </div>
 
         <AnimatePresence>
@@ -120,25 +130,27 @@ const Header = () => {
         </AnimatePresence>
       </header>
 
-      <div className="pt-16 flex flex-col justify-between items-center space-y-4 w-full">
+      <div
+        className={`pt-16 flex flex-col justify-between items-center space-y-4 w-full pb-6`}
+      >
         <h1
           className={`text-2xl font-semibold ${
-            isSticky ? "invisible pb-20" : "visible"
+            isSticky ? "invisible " : "visible"
           }`}
           id="iheader"
           ref={headerRef}
         >
           YashDex
         </h1>
-        <div
-          className={`flex flex-col space-y-4 justify-center w-full  ${
-            isSticky ? "hidden" : "relative"
-          }`}
-          ref={searchRef}
-        >
-          <Search />
-          <Tags />
-        </div>
+      </div>
+      <div
+        className={`flex flex-col space-y-4 justify-center w-full z-[9999] ${
+          isSticky ? "fixed top-14" : "relative"
+        }`}
+        ref={searchRef}
+      >
+        <Search />
+        <Tags />
       </div>
     </>
   );

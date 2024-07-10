@@ -17,7 +17,7 @@ export default function Home({ params }: HomeProps) {
     <>
       <Header />
 
-      <main className=" flex flex-col pt-[10px]">
+      <main className="relative flex flex-col pt-[20px]">
         <PokemonList />
         <ThemeToggle />
         <AI>

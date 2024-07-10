@@ -15,7 +15,7 @@ const Tags = () => {
   };
 
   return (
-    <div>
+    <div className={`${tagsClicked ? "backdrop-blur-sm" : ""}`}>
       <AnimatePresence>
         <motion.div
           initial="collapsed"
@@ -23,7 +23,7 @@ const Tags = () => {
           exit="collapsed"
           variants={variants}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="w-full flex flex-col space-y-4 items-center justify-center overflow-hidden"
+          className="w-full flex flex-col space-y-4 items-center justify-center overflow-hidden "
         >
           <h3 className="text-2xl font-semibold">Tags</h3>
           <h4 className="text-sm font-medium">Types</h4>
