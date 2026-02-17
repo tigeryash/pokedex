@@ -3,8 +3,6 @@ import { AI } from "./actions";
 import PokemonList from "@/components/pokemonlist/pokemon-list";
 import Header from "@/components/header/header";
 import ThemeToggle from "@/components/theme-toggle";
-import { Suspense } from "react";
-import ListSkeleton from "@/components/pokemonlist/list-skeleton";
 
 type HomeProps = {
   params: {

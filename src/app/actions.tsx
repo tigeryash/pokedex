@@ -132,3 +132,8 @@ export async function fetchPokemon({ page = 1 }: { page: number }) {
   const pokemon = await P.listPokemons((page - 1) * 50, 50);
   return pokemon;
 }
+
+export async function fetchPokemonByTag(tag: string) {
+  const pokemon = await P.listTypes(0, 100);
+  return pokemon;
+}
