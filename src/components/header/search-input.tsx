@@ -1,39 +1,24 @@
 "use client";
 
-import { Form, useForm } from "react-hook-form";
 import { Input } from "../ui/input";
-import { FormControl, FormField, FormItem } from "../ui/form";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {  useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import pokemon from "../../lib/pokemon.json";
 import Link from "next/link";
 import Image from "next/image";
 
-const searchSchema = z.object({
-  message: z.string().min(1),
-});
 
-const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
+
+const SearchInput = () => {
   const router = useRouter();
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [query] = useDebounce(text, 400);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
-
-  const formRef = useRef<HTMLFormElement>(null);
-
-  const form = useForm({
-    resolver: zodResolver(searchSchema),
-    defaultValues: {
-      message: "",
-    },
-  });
+  
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -57,7 +42,10 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
     if (e.key === "Enter" && text.length > 0) {
       e.preventDefault();
       if (!e.shiftKey) {
-        router.push(`/${query}`);
+        const params = new URLSearchParams(window.location.search);
+        params.set("q", query);
+        params.delete("page");
+        router.push(`?${params.toString()}`);
       }
     }
   };
@@ -77,26 +65,22 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
     }
   };
 
-  const onSubmit = async (data: z.infer<typeof searchSchema>) => {
-    form.reset({ message: "" });
-    router.push(`/pokemon?query=${query}`);
-  };
 
   return (
-    <div
-      className="flex items-center rounded-full w-[90%] md:w-[600px] lg:w-[800px] mx-auto px-8 relative"
-      ref={ref}
+    <form
+      className="flex grow-0 shrink-0 w-[45%] lg:w-[35%] items-center gap-3 rounded-full border
+       border-white/10 bg-white/5  transition-all duration-200 relative "
     >
       <Input
         ref={inputRef}
         onKeyDown={handleKeyDown}
-        className="w-full p-2 dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE]   dark:focus:bg-gray-900"
+        className="w-full dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE]   dark:focus:bg-gray-900"
         placeholder="Search for a Pokemon"
         onChange={handleChange}
       />
       {suggestions.length > 0 && text.length > 0 && (
         <div
-          className="absolute top-10 max-h-[500px] bg-[#FBF7EE] border-2 border-[#0dade8] dark:border-[#fafcfd]  dark:bg-[#1e1e1e] left-auto w-[75%] sm:w-[90%] md:w-[90%] overflow-y-auto z-20 right-auto rounded-md"
+          className="absolute top-10 max-h-[500px] bg-[#FBF7EE] border-2 border-[#0dade8] dark:border-[#fafcfd]  dark:bg-[#1e1e1e] left-auto w-[75%] sm:w-[90%] md:w-[90%] overflow-y-auto z-99 right-auto rounded-md"
           ref={suggestionsRef}
         >
           {suggestions.map((suggestion, idx) => (
@@ -117,6 +101,10 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
               />
               <Link
                 href={`/${pokemon[suggestion as keyof typeof pokemon]}`}
+                onClick={() => {
+                  setText("");
+                  setSuggestions([]);
+                }}
                 className="capitalize"
               >
                 {suggestion}
@@ -125,13 +113,10 @@ const Search = forwardRef<HTMLDivElement, any>((props, ref) => {
           ))}
         </div>
       )}
-      <Button className="rounded-full absolute right-8 top-0" type="submit">
-        <MagnifyingGlassIcon className="w-4 h-4" />
-      </Button>
-    </div>
+    </form>
   );
-});
+}
 
-Search.displayName = "Search";
+SearchInput.displayName = "Search";
 
-export default Search;
+export default SearchInput;

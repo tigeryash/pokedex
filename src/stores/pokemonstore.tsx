@@ -11,5 +11,5 @@ export const usePokemonStore = create<PokemonStore>((set) => ({
   tagsClicked: false,
   setTagsClicked: (tagsClicked) => set({ tagsClicked }),
   isSticky: false,
-  setIsSticky: (isSticky) => set({ isSticky }),
+  setIsSticky: (isSticky) => set((state) => (state.isSticky === isSticky ? state : { isSticky })),
 }));

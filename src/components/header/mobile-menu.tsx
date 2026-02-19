@@ -3,7 +3,7 @@
 import { Cross1Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import MenuLink from "./menu-link";
-import { motion } from "framer-motion";
+import { motion, cubicBezier, easeInOut } from "framer-motion";
 import Image from "next/image";
 import solgaleo from "../../../public/solgaleo.png";
 import lunala from "../../../public/lunala.png";
@@ -12,11 +12,11 @@ import { useTheme } from "next-themes";
 const MobileMenu = ({
   setIsMenuOpen,
   isMenuOpen,
-  menuLinks,
+  links,
 }: {
   setIsMenuOpen: (isMenuOpen: boolean) => void;
   isMenuOpen: boolean;
-  menuLinks: { label: string; href: string }[];
+  links: { label: string; href: string }[];
 }) => {
   const { setTheme, theme } = useTheme();
 
@@ -28,7 +28,7 @@ const MobileMenu = ({
       scaleY: 1,
       transition: {
         duration: 0.5,
-        ease: [0.12, 0, 0.39, 0],
+        ease: cubicBezier(0.65, 0, 0.35, 1),
       },
     },
     exit: {
@@ -36,26 +36,45 @@ const MobileMenu = ({
       transition: {
         delay: 0.5,
         duration: 0.5,
-        ease: [0.12, 0, 0.39, 1],
+        ease: cubicBezier(0.12, 0, 0.39, 1),
       },
     },
   };
 
-  const containerVars = {
-    initial: {
-      transition: {
-        staggerChildren: 0.09,
-        staggerDirection: -1,
-      },
+ const containerVars = {
+  initial: {},
+  open: {
+    transition: {
+      delayChildren: 0.55,
+      staggerChildren: 0.09,
+      staggerDirection: 1,
     },
-    open: {
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.09,
-        staggerDirection: 1,
-      },
+  },
+  exit: {
+    transition: {
+      staggerChildren: 0.09,
+      staggerDirection: -1, // reverse order on close
     },
-  };
+  },
+};
+
+
+
+const linkVars = {
+  initial: { y: "120%", opacity: 0 },
+  open: {
+    y: "0%",
+    opacity: 1,
+    transition: { duration: 0.65, ease: cubicBezier(0.22, 1, 0.36, 1) },
+  },
+  exit: {
+    y: "120%",
+    opacity: 0,
+    transition: { duration: .35, ease: cubicBezier(0.65, 0, 0.35, 1) },
+  },
+};
+
+
 
   const headerVars = {
     initial: {
@@ -66,7 +85,7 @@ const MobileMenu = ({
       transition: {
         duration: 0.2,
         delay: 0.4,
-        ease: [0.12, 0, 0.39, 0],
+        ease: cubicBezier(0.12, 0, 0.39, 0),
       },
     },
     exit: {
@@ -74,7 +93,7 @@ const MobileMenu = ({
       transition: {
         duration: 0.2,
         delay: 0.4,
-        ease: [0.12, 0, 0.39, 1],
+        ease: cubicBezier(0.12, 0, 0.39, 1),
       },
     },
   };
@@ -85,7 +104,7 @@ const MobileMenu = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="fixed top-0 left-0 w-full min-h-screen origin-top  flex flex-col justify-center items-center z-20
+      className="absolute top-0 left-0 w-full min-h-screen origin-top  flex flex-col justify-center items-center z-20
         bg-white dark:bg-[#240E62]
       "
     >
@@ -93,16 +112,16 @@ const MobileMenu = ({
         <motion.h1
           initial={{
             opacity: 0,
-            x: -100,
+            
           }}
           animate={{
             opacity: 1,
-            x: 0,
+           
           }}
           exit={{
             opacity: 0,
           }}
-          transition={{ duration: 0.2, delay: 0.4, ease: [0.12, 0, 0.39, 0] }}
+          transition={{ duration: 0.2, delay: 0.4, ease: cubicBezier(0.12, 0, 0.39, 0) }}
           className="text-2xl "
         >
           YashDex
@@ -116,7 +135,7 @@ const MobileMenu = ({
         >
           <Cross1Icon
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="w-8 h-8 md:hidden"
+            className="w-8 h-8 lg:hidden"
           />
         </motion.div>
       </div>
@@ -149,24 +168,29 @@ const MobileMenu = ({
         variants={containerVars}
         initial="initial"
         animate="open"
-        exit="initial"
-        className="  flex-1 flex flex-col justify-center items-center w-full space-y-4"
+        exit="exit"
+        className="flex-1 flex flex-col justify-center items-center w-full space-y-4"
       >
-        {menuLinks.map((link) => (
-          <div key={link.href} className="overflow-hidden">
-            <MenuLink
-              label={link.label}
-              href={link.href}
-              setIsMenuOpen={setIsMenuOpen}
-            />
-          </div>
+        {links.map((link) => (
+          <motion.li
+            key={link.href} className="overflow-hidden "
+          >
+          <Link href={link.href} >  
+            <motion.span  
+              className="block text-4xl md:text-5xl font-medium no-underline transition-colors duration-200" 
+              variants={linkVars}
+            >
+              {link.label}
+            </motion.span>
+          </Link>
+        </motion.li>
         ))}
       </motion.div>
       <div className="flex justify-center items-center w-full p-4 pb-6">
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+          initial={{ opacity: 0,  }}
+          animate={{ opacity: 1, transition: { duration: 0.3, delay: 0.5} }}
+          exit={{ opacity: 0, transition: { duration: 0.2, delay: 0.2 } }}
         >
           Made by{" "}
           <Link href="https://github.com/tigeryash" target="_blank">
@@ -179,3 +203,5 @@ const MobileMenu = ({
 };
 
 export default MobileMenu;
+
+

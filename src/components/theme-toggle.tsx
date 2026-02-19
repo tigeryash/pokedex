@@ -25,7 +25,7 @@ const ThemeToggle = () => {
           >
             <Image
               src={theme === "light" ? solgaleo : lunala}
-              alt="light mode"
+              alt="Switch theme"
               className="w-6 h-6"
             />
           </div>

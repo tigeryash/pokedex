@@ -1,139 +1,98 @@
 "use server";
 
-import { createAI, streamUI, getMutableAIState } from "ai/rsc";
-import { nanoid } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { z } from "zod";
-import PokemonInfoCard from "@/components/pokemonchat/pokemon-info-card";
-import { ReactNode } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { PokemonClient } from "pokenode-ts";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus as dark } from "react-syntax-highlighter/dist/esm/styles/prism";
-
-export type MessageContent = {
-  type: "text" | "image";
-  text?: string;
-  image?: string;
-};
-
-export type ServerMessage = {
-  role: "user" | "assistant";
-  content: MessageContent[];
-};
-
-export type ClientMessage = {
-  id: string;
-  role: "user" | "assistant";
-  display: ReactNode;
-  image?: string;
-};
 
 const P = new PokemonClient();
 
-export async function continueConversation(
-  message: ServerMessage
-): Promise<ClientMessage> {
-  const history = getMutableAIState();
+export async function fetchPokemon({ 
+  page = 1, 
+  limit = 50,
+  types = [],
+  regions = [],
+  sort = "numerical",
+  search = ""
+}: { 
+  page?: number; 
+  limit?: number;
+  types?: string[];
+  regions?: string[];
+  sort?: string;
+  search?: string;
+}) {
+  const pokemon = await P.listPokemons((page - 1) * limit, limit);
+  let results = pokemon.results;
 
-  // Debugging the history object
+  // Filter by search term first
+  if (search) {
+    results = results.filter(p => 
+      p.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }
 
-  const result = await streamUI({
-    model: openai("gpt-4o"),
-    system: `You are a Pokemon Professor. You only answer questions 
-      relating to Pokemon. You go by the name The Professor. You are used on a Pokedex app. 
-      If a user sends an image figure out what the Pokemon is. If the image doesn't contain a real 
-      Pokemon tell them that it is not a Pokemon. Make sure you are also considering newer Pokemon
-      releases.`,
-    messages: [...history.get(), message],
-    text: ({ content, done }) => {
-      if (done) {
-        history.done((messages: ServerMessage[]) => [
-          ...messages,
-          { role: "assistant", content },
-        ]);
-      }
-      return (
-        <ReactMarkdown
-          className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0"
-          remarkPlugins={[remarkGfm]}
-          components={{
-            code(props) {
-              const { children, className, node, ...rest } = props;
-              const match = /language-(\w+)/.exec(className || "");
-              return match ? (
-                <SyntaxHighlighter
-                  PreTag="div"
-                  language={match[1]}
-                  style={dark}
-                  wrapLines={true}
-                  wrapLongLines={true}
-                >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
-              ) : (
-                <code {...rest} className={className}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
-          {content}
-        </ReactMarkdown>
+  // If regions are specified, filter by region ID ranges
+  if (regions && regions.length > 0 && regions.length < 9) {
+    const { RegionIdRanges } = await import("@/lib/constants");
+    const regionRanges = regions.map(r => RegionIdRanges[r]).filter(Boolean);
+    
+    if (regionRanges.length > 0) {
+      const allowedIds: number[] = [];
+      regionRanges.forEach(range => {
+        for (let i = range.start; i <= range.end; i++) {
+          allowedIds.push(i);
+        }
+      });
+      
+      // Get pokemon with their IDs and filter
+      const pokemonWithDetails = await Promise.all(
+        results.slice(0, 100).map(async (p, idx) => {
+          const id = (page - 1) * limit + idx + 1;
+          return { ...p, id };
+        })
       );
-    },
-    tools: {
-      getPokemon: {
-        description:
-          "Get information about a Pokemon when given a Pokemon name or a Pokemon ID",
-        parameters: z.object({
-          name: z.string().or(z.number()),
-        }),
-        generate: async function* ({ name }) {
-          yield <div>Loading...</div>;
-          try {
-            const Pname =
-              typeof name === "string"
-                ? await P.getPokemonByName(name.toLowerCase())
-                : await P.getPokemonById(name);
-            const species =
-              typeof name === "string"
-                ? await P.getPokemonSpeciesByName(name.toLowerCase())
-                : await P.getPokemonSpeciesById(name);
-            const pokemon = [Pname, species];
-            return <PokemonInfoCard pokemon={pokemon} />;
-          } catch (error) {
-            console.log(error);
-            return <div>{`Pokemon not found ${error} ${name}`}</div>;
-          }
-        },
-      },
-    },
-  });
+      
+      results = pokemonWithDetails.filter(p => allowedIds.includes(p.id));
+    }
+  }
+
+  // If types are specified, filter by type
+  if (types && types.length > 0) {
+    // Get all pokemon and filter by type
+    const typePromises = types.map(type => P.getTypeByName(type));
+    const typeData = await Promise.all(typePromises);
+    
+    const allowedPokemonNames = new Set<string>();
+    typeData.forEach(type => {
+      type.pokemon?.forEach(p => {
+        allowedPokemonNames.add(p.pokemon.name);
+      });
+    });
+    
+    results = results.filter(p => allowedPokemonNames.has(p.name));
+  }
+
+  // Sort results
+  switch (sort) {
+    case "alphabetical":
+      results.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case "numerical":
+    default:
+      // Already in numerical order from API
+      break;
+  }
 
   return {
-    id: nanoid(),
-    role: "assistant",
-    display: result.value,
+    ...pokemon,
+    results,
+    count: results.length,
   };
 }
 
-export const AI = createAI<ServerMessage[], ClientMessage[]>({
-  initialUIState: [],
-  initialAIState: [], // Ensure this is correctly set
-  actions: {
-    continueConversation,
-  },
-});
-
-export async function fetchPokemon({ page = 1 }: { page: number }) {
-  const pokemon = await P.listPokemons((page - 1) * 50, 50);
-  return pokemon;
-}
-
-export async function fetchPokemonByTag(tag: string) {
-  const pokemon = await P.listTypes(0, 100);
-  return pokemon;
+export async function fetchPokemonByType(type: string) {
+  try {
+    const typeData = await P.getTypeByName(type.toLowerCase());
+    return typeData.pokemon?.map(p => p.pokemon) || [];
+  } catch {
+    return [];
+  }
 }

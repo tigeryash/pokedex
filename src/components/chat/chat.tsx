@@ -10,18 +10,23 @@ import {
 } from "@/components/ui/tooltip";
 import { motion, useAnimate } from "framer-motion";
 import ChatInput from "./chat-input";
-import { useUIState } from "ai/rsc";
-import { ClientMessage } from "@/app/actions";
 import webcamStore from "@/stores/webcamstore";
 import WebcamUi from "../webcam-ui";
-import Image from "next/image";
+
+interface Message {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+}
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
   const [scope, animate] = useAnimate();
-  const [messages] = useUIState(); // Removed the incorrect type annotation <UIState[]>
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const showWebCam = webcamStore((state) => state.showWebCam);
+  const camImage = webcamStore((state) => state.camImage);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
@@ -30,6 +35,70 @@ const Chat = () => {
 
   const toggleOpen = () => {
     setOpen(!open);
+  };
+
+  const handleSubmit = async (input: string) => {
+    if (!input.trim()) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to get response");
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantMessage = "";
+
+      const assistantMessageObj: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "",
+      };
+
+      setMessages((prev) => [...prev, assistantMessageObj]);
+
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        assistantMessage += chunk;
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantMessageObj.id
+              ? { ...m, content: assistantMessage }
+              : m
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "Sorry, I encountered an error. Please try again.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -76,7 +145,7 @@ const Chat = () => {
                   </div>
 
                   <div className="flex-1 overflow-y-auto p-2 bg-[#C2C7C6] dark:bg-[#45348E] w-full rounded-lg text-[#FBF7EE] dark:text-[#E5DA7F] text-sm">
-                    {messages.map((msg: ClientMessage) => (
+                    {messages.map((msg) => (
                       <div
                         key={msg.id}
                         className={`chat ${
@@ -87,20 +156,19 @@ const Chat = () => {
                           {msg.role === "user" ? "Trainer" : "Professor"}
                         </div>
                         <div className="chat-bubble">
-                          {msg.display}
-
-                          {msg.image && (
-                            <Image
-                              src={msg.image}
-                              alt="user image"
-                              width={200}
-                              height={200}
-                              className="rounded-lg  mt-2"
-                            />
-                          )}
+                          {msg.content}
                         </div>
                       </div>
                     ))}
+
+                    {isLoading && messages.length > 0 && messages[messages.length - 1].role !== "assistant" && (
+                      <div className="chat chat-start">
+                        <div className="chat-header">Professor</div>
+                        <div className="chat-bubble">
+                          <span className="loading loading-dots loading-sm"></span>
+                        </div>
+                      </div>
+                    )}
 
                     {messages.length === 0 && (
                       <p className="text-center">{`Ask the Professor about Pokemon. (Ex. "What is Porygon")`}</p>
@@ -115,7 +183,10 @@ const Chat = () => {
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="mt-2 w-full"
                   >
-                    <ChatInput />
+                    <ChatInput 
+                      onSubmit={handleSubmit}
+                      isLoading={isLoading}
+                    />
                   </motion.div>
                 </>
               ) : (

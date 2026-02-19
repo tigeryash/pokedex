@@ -11,23 +11,23 @@ import {
 } from "@/components/ui/form";
 import { TFormSchema, formSchema } from "@/types/message-type";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import React, { useEffect, useRef } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import React, { useEffect, useRef, useState } from "react";
 import { CameraIcon, Cross1Icon, ImageIcon } from "@radix-ui/react-icons";
-import { ClientMessage } from "@/app/actions";
-import { useActions, useUIState } from "ai/rsc";
-import { nanoid } from "ai";
 import webcamStore from "@/stores/webcamstore";
 import Image from "next/image";
 import { resizeFile } from "@/lib/utils";
 
-const ChatInput = () => {
-  const { continueConversation } = useActions();
-  const [messages, setMessages] = useUIState();
+interface ChatInputProps {
+  onSubmit: (input: string) => Promise<void>;
+  isLoading: boolean;
+}
+
+const ChatInput: React.FC<ChatInputProps> = ({ onSubmit, isLoading }) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const [input, setInput] = useState("");
   const camImage = webcamStore((state) => state.camImage);
   const setCamImage = webcamStore((state) => state.setCamImage);
-
   const setShowWebCam = webcamStore((state) => state.setShowWebCam);
 
   const form = useForm<TFormSchema>({
@@ -52,45 +52,14 @@ const ChatInput = () => {
         "message",
         "If there is a Pokemon in this image could you tell me who this Pokemon is?"
       );
+      setInput("If there is a Pokemon in this image could you tell me who this Pokemon is?");
     }
   }, [camImage, form]);
 
-  const onSubmit = async (data: TFormSchema) => {
-    console.log("Form submitted with data:", data); // Add this line
-    console.log("camImage:", camImage);
+  const handleSubmit = async (data: TFormSchema) => {
+    await onSubmit(data.message);
     form.reset({ message: "" });
-
-    setMessages((currConvo: ClientMessage[]) => [
-      ...currConvo,
-      {
-        id: nanoid(),
-        role: "user",
-        display: data.message,
-        image: camImage || undefined,
-      },
-    ]);
-
-    let response;
-    if (camImage && typeof camImage === "string") {
-      const base64Image = camImage.split(",")[1];
-      response = await continueConversation({
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text: data.message,
-          },
-          { type: "image", image: base64Image },
-        ],
-      });
-    } else {
-      response = await continueConversation({
-        role: "user",
-        content: [{ type: "text", text: data.message }],
-      });
-    }
-
-    setMessages((currConvo: ClientMessage[]) => [...currConvo, response]);
+    setInput("");
     setCamImage(null);
   };
 
@@ -107,7 +76,7 @@ const ChatInput = () => {
       <Form {...form}>
         <form
           ref={formRef}
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleSubmit)}
           className="space-y-2"
         >
           <FormField
@@ -131,6 +100,7 @@ const ChatInput = () => {
                           onClick={() => {
                             setCamImage(null);
                             form.setValue("message", "");
+                            setInput("");
                           }}
                         >
                           <Cross1Icon className="w-2 h-2" />
@@ -144,7 +114,12 @@ const ChatInput = () => {
                         onKeyDown={handleKeyDown}
                         className="w-full p-2 rounded-md text-[#313139] bg-[#FBF7EE] dark:text-[#FEFEFEda] dark:bg-[#45348E] resize-y max-h-[206px]"
                         placeholder="Type a message..."
-                        {...field}
+                        value={input}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setInput(e.target.value);
+                        }}
+                        disabled={isLoading}
                       />
                     )}
                   </>
@@ -157,12 +132,14 @@ const ChatInput = () => {
             <Button
               className="flex-1 bg-[#164b96]  dark:bg-[#E5DA7F]"
               onClick={() => setShowWebCam(true)}
+              type="button"
             >
               <CameraIcon className="dark:text-[#655C14] text-[#fff]" />
             </Button>
             <Button
               className="flex-1 bg-[#164b96] dark:bg-[#E5DA7F]"
               onClick={() => document.getElementById("fileInput")?.click()}
+              type="button"
             >
               <ImageIcon className="dark:text-[#655C14] text-[#fff]" />
             </Button>
@@ -178,8 +155,9 @@ const ChatInput = () => {
           <Button
             className="w-full bg-[#EFE85A] dark:bg-[#6046D8] text-[#313139] dark:text-[#FEFEFE]"
             type="submit"
+            disabled={isLoading}
           >
-            Submit
+            {isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Submit"}
           </Button>
         </form>
       </Form>
