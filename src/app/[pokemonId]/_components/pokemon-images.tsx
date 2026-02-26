@@ -52,11 +52,10 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
             onChange={(e) => setActiveGame(e.target.value)}
             className="bg-black/10 border border-white/10 rounded-md px-3 py-1.5 text-sm font-medium text-foreground cursor-pointer outline-none hover:bg-black/20 transition-colors"
           >
-            <div className="rounded-md overflow-hidden">
               <option>Red</option>
               <option>Blue</option>
               <option>Yellow</option>
-            </div>
+  
       
           </select>
         </div>

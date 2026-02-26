@@ -1,9 +1,13 @@
-import Abilities from "@/app/[pokemonId]/_components/abilties";
-import StatChart from "@/app/[pokemonId]/_components/stat-chart";
+
 import { Pokemon, PokemonClient, PokemonSpecies } from "pokenode-ts";
-import MovesList from "@/app/[pokemonId]/_components/moves";
 import TableOfContents from "../../components/tableofcontents/table-of-contents";
 import PokemonImages from "./_components/pokemon-images";
+import PokemonName from "./_components/name";
+import PokemonTypes from "./_components/types";
+import PokemonDescription from "./_components/description";
+import PokemonAbilities from "./_components/abilities";
+import PokemonPhysicalAttributes from "./_components/physical-attributes";
+import PokemonStatistics from "./_components/statistics";
 
 type PokemonDetailsProps = {
   params: {
@@ -25,9 +29,22 @@ const PokemonDetails = async ({
     <TableOfContents id={pokemonId} />
     <div className="flex flex-col justify-center items-center w-full max-w-4xl mx-auto pt-12 p-4 space-y-8">
       <PokemonImages pokemon={pokemon} />
-      <StatChart stats={pokemon[0].stats} />
-      <Abilities abilities={pokemon[0].abilities} />
-      <MovesList moves={pokemon[0].moves} />
+
+      <div>
+        <PokemonName />
+        <PokemonTypes types={pokemon[0].types.map(t => t.type.name)} />
+        <PokemonDescription description={pokemon[1].flavor_text_entries[0].flavor_text} />
+        <PokemonAbilities abilities={pokemon[0].abilities} />
+        <PokemonPhysicalAttributes />
+        <PokemonStatistics />
+        <PokemonMoves />
+        <PokemonEvolution />
+        <PokemonTypeEffectiveness />
+        <PokemonTraining />
+        <PokemonAdditionalInfo />
+        <PokemonLocations />
+      </div>
+    
     </div>
     
     </>

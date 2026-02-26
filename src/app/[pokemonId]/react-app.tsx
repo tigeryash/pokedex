@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import { Volume2, ArrowRight, Circle, Hexagon, Target } from 'lucide-react';
 import { PokemonTypesColors, PokemonTypesColorsRGBA, PokemonTypes } from '@/lib/constants';
 import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
 
 const customStyles = {
   root: {
@@ -23,17 +24,6 @@ const customStyles = {
   }
 };
 
-const TypeIcon = ({ type }: { type: string }) => {
-  return (
-    <Image 
-      src={PokemonTypes[type as keyof typeof PokemonTypes]} 
-      alt={type}
-      width={16}
-      height={16}
-      className="w-4 h-4"
-    />
-  );
-};
 
 const CategoryIcon = ({ category }: { category: string }) => {
   if (category === 'special') {
@@ -42,12 +32,7 @@ const CategoryIcon = ({ category }: { category: string }) => {
   return <Hexagon className="w-3.5 h-3.5" />;
 };
 
-const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-  <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] mb-5 flex items-center gap-3">
-    {children}
-    <div className="h-px bg-white/10 flex-1" />
-  </div>
-);
+
 
 const DataPanel = ({ onSectionChange }: { onSectionChange: (section: string) => void }) => {
   const [activeTab, setActiveTab] = useState('Level Up');
