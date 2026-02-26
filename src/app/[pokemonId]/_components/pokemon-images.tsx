@@ -24,19 +24,20 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       }}
     >
       {/* Pokemon Number */}
-      <div className="absolute top-6 left-6 font-mono text-[3rem] font-bold text-white/10 pointer-events-none text-shadow-drop">
+      <div className="absolute top-6 left-6  font-mono text-[3rem] font-bold text-black/60 dark:text-white/30
+       pointer-events-none text-shadow-drop dark:text-shadow-white">
         #{pokemon[0].id.toString().padStart(3, '0')}
       </div>
 
       {/* Gen Select and Game Select */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-        <div className="flex items-center gap-3">
-          <div className="flex gap-1 p-1 bg-white/5 rounded-lg border border-white/5">
-            {['Gen 1', 'Gen 2', 'Gen 3', 'Gen 4', 'Gen 5', 'Gen 6+'].map(gen => (
+      <div className="absolute flex  bottom-6 left-0 -translate-x-1/2 z-2">
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col gap-1 p-1 bg-black/10 rounded-lg border border-white/5">
+            {['Gen 1', 'Gen 2', 'Gen 3', 'Gen 4', 'Gen 5', 'Gen 6', 'Gen 7', 'Gen 8', 'Gen 9'].map(gen => (
               <button
                 key={gen}
                 onClick={() => setActiveGen(gen)}
-                className={`px-3 py-1 text-xs font-medium rounded transition-all duration-200 ${
+                className={`px-6 py-1 text-xs font-medium rounded transition-all duration-200 ${
                   activeGen === gen 
                     ? 'bg-white/10 text-foreground' 
                     : 'text-muted-foreground hover:text-foreground'
@@ -49,11 +50,14 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
           <select
             value={activeGame}
             onChange={(e) => setActiveGame(e.target.value)}
-            className="bg-white/5 border border-white/10 rounded-md px-3 py-1.5 text-sm font-medium text-foreground cursor-pointer outline-none hover:bg-white/10 transition-colors"
+            className="bg-black/10 border border-white/10 rounded-md px-3 py-1.5 text-sm font-medium text-foreground cursor-pointer outline-none hover:bg-black/20 transition-colors"
           >
-            <option>Red</option>
-            <option>Blue</option>
-            <option>Yellow</option>
+            <div className="rounded-md overflow-hidden">
+              <option>Red</option>
+              <option>Blue</option>
+              <option>Yellow</option>
+            </div>
+      
           </select>
         </div>
       </div>
@@ -75,7 +79,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       </div>
 
       {/* Navigation Dots */}
-      <div className="absolute bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-[rgba(10,10,10,0.8)] backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/10 z-20 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="absolute bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-[rgba(10,10,10,0.8)] backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/10 z-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <button className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer">
           ←
         </button>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Volume2, ArrowRight, Circle, Hexagon, Target } from 'lucide-react';
 import { PokemonTypesColors, PokemonTypesColorsRGBA, PokemonTypes } from '@/lib/constants';
+import Image from 'next/image';
 
 const customStyles = {
   root: {
@@ -24,9 +25,11 @@ const customStyles = {
 
 const TypeIcon = ({ type }: { type: string }) => {
   return (
-    <img 
+    <Image 
       src={PokemonTypes[type as keyof typeof PokemonTypes]} 
       alt={type}
+      width={16}
+      height={16}
       className="w-4 h-4"
     />
   );
