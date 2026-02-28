@@ -8,6 +8,12 @@ import PokemonDescription from "./_components/description";
 import PokemonAbilities from "./_components/abilities";
 import PokemonPhysicalAttributes from "./_components/physical-attributes";
 import PokemonStatistics from "./_components/statistics";
+import PokemonMoves from "./_components/moves";
+import PokemonEvolution from "./_components/evolution";
+import PokemonTypeEffectiveness from "./_components/type-effectiveness";
+import PokemonTraining from "./_components/training";
+import PokemonAdditionalInfo from "./_components/additional-info";
+import PokemonLocations from "./_components/locations";
 
 type PokemonDetailsProps = {
   params: {
@@ -37,7 +43,7 @@ const PokemonDetails = async ({
         <PokemonAbilities abilities={pokemon[0].abilities} />
         <PokemonPhysicalAttributes />
         <PokemonStatistics />
-        <PokemonMoves />
+        <PokemonMoves moves={pokemon[0].moves} />
         <PokemonEvolution />
         <PokemonTypeEffectiveness />
         <PokemonTraining />
