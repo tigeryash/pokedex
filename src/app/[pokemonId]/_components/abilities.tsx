@@ -10,29 +10,32 @@ const PokemonAbilities = ({ abilities }: AbilitiesProps) => {
     return null;
   }
 
+  const formatName = (value: string) =>
+    value
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
   return (
    <div data-section="abilities">
         <SectionLabel>Abilities</SectionLabel>
         <div className="flex flex-col gap-4">
-          <div className="p-5 bg-white/[0.02] border border-white/5 rounded-lg">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-lg font-semibold text-[var(--text-primary)]">Cursed Body</span>
+          {abilities.map((ability) => (
+            <div key={ability.ability.name} className="p-5 bg-white/2 border border-white/5 rounded-lg">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-lg font-semibold text-(--text-primary)">{formatName(ability.ability.name)}</span>
+                {ability.is_hidden && (
+                  <span className="px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider bg-purple-500/20 text-(--accent) rounded">
+                    Hidden
+                  </span>
+                )}
+              </div>
+              <p className="text-sm leading-relaxed text-(--text-secondary) m-0">
+                {ability.is_hidden
+                  ? "This hidden ability can only be obtained through special encounters, transfers, or breeding combinations."
+                  : "This is one of this Pokémon's standard battle abilities."}
+              </p>
             </div>
-            <p className="text-sm leading-relaxed text-[var(--text-secondary)] m-0">
-              When a move hits this Pokémon, that move has a 30% chance of becoming disabled. A disabled move cannot be used until it is re-enabled by switching out.
-            </p>
-          </div>
-          <div className="p-5 bg-white/[0.02] border border-white/5 rounded-lg">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-lg font-semibold text-[var(--text-primary)]">Levitate</span>
-              <span className="px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider bg-purple-500/20 text-[var(--accent)] rounded">
-                Hidden
-              </span>
-            </div>
-            <p className="text-sm leading-relaxed text-[var(--text-secondary)] m-0">
-              This Pokémon is immune to Ground-type moves, Spikes, Toxic Spikes, and Arena Trap.
-            </p>
-          </div>
+          ))}
         </div>
       </div>
   );

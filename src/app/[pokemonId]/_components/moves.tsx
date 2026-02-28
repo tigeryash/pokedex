@@ -2,91 +2,119 @@
 
 import { useState } from "react";
 import { PokemonMove } from "pokenode-ts";
-import { motion } from "framer-motion";
+import { SectionLabel } from "@/components/section-label";
+import { Hexagon, Target } from "lucide-react";
 
-type MovesListProps = {
+type PokemonMovesProps = {
   moves: PokemonMove[];
 };
 
-const MovesList = ({ moves }: MovesListProps) => {
-  const [search, setSearch] = useState("");
-  const [displayCount, setDisplayCount] = useState(20);
+type MoveTab = "level-up" | "machine" | "egg" | "tutor";
+
+const tabs: { id: MoveTab; label: string }[] = [
+  { id: "level-up", label: "Level Up" },
+  { id: "machine", label: "TM Moves" },
+  { id: "egg", label: "Egg Moves" },
+  { id: "tutor", label: "Tutor Moves" },
+];
+
+const CategoryIcon = ({ category }: { category: string }) => {
+  if (category === "special") {
+    return <Target className="w-3.5 h-3.5" />;
+  }
+  return <Hexagon className="w-3.5 h-3.5" />;
+};
+
+const formatName = (value: string) =>
+  value
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+const PokemonMoves = ({ moves }: PokemonMovesProps) => {
+  const [activeTab, setActiveTab] = useState<MoveTab>("level-up");
 
   if (!moves || moves.length === 0) {
     return null;
   }
 
-  // Filter moves by search
   const filteredMoves = moves
-    .filter(move => move.move.name.toLowerCase().includes(search.toLowerCase()))
-    .slice(0, displayCount);
+    .filter((move) =>
+      move.version_group_details.some(
+        (detail) => detail.move_learn_method.name === activeTab,
+      ),
+    )
+    .map((move) => {
+      const currentMethod =
+        move.version_group_details.find(
+          (detail) => detail.move_learn_method.name === activeTab,
+        ) ?? move.version_group_details[0];
 
-  const handleLoadMore = () => {
-    setDisplayCount(prev => prev + 20);
-  };
+      return {
+        name: move.move.name,
+        level: currentMethod?.level_learned_at ?? 0,
+      };
+    })
+    .sort((left, right) => left.level - right.level || left.name.localeCompare(right.name))
+    .slice(0, 40);
 
   return (
-    <div className="w-full max-w-2xl">
-      <h3 className="text-2xl font-bold text-center mb-4">Moves</h3>
-      
-      <input
-        type="text"
-        placeholder="Search moves..."
-        value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setDisplayCount(20);
-        }}
-        className="w-full p-2 mb-4 border rounded-lg dark:bg-gray-800 dark:border-gray-700"
-      />
-      
-      <div className="grid gap-2 max-h-96 overflow-y-auto">
-        {filteredMoves.map((move, index) => (
-          <motion.div
-            key={`${move.move.name}-${index}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.02 }}
-            className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg flex justify-between items-center"
+    <div id="moves">
+      <SectionLabel>Moves</SectionLabel>
+      <div className="flex gap-1 mb-5 border-b border-white/5 pb-0.5 overflow-x-auto">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2 text-sm font-medium bg-transparent border-none cursor-pointer relative whitespace-nowrap transition-colors ${
+              activeTab === tab.id
+                ? "text-(--text-primary) border-b-2 border-(--accent)"
+                : "text-(--text-secondary) border-b-2 border-transparent"
+            }`}
           >
-            <span className="capitalize font-medium">
-              {move.move.name.replace(/-/g, " ")}
-            </span>
-            <div className="flex gap-2">
-              {move.version_group_details.some(v => v.move_learn_method.name === "level-up") && (
-                <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded">
-                  Lv.{move.version_group_details.find(v => v.move_learn_method.name === "level-up")?.level_learned_at || 1}
-                </span>
-              )}
-              {move.version_group_details.some(v => v.move_learn_method.name === "machine") && (
-                <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 rounded">
-                  TM
-                </span>
-              )}
-              {move.version_group_details.some(v => v.move_learn_method.name === "egg") && (
-                <span className="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded">
-                  Egg
-                </span>
-              )}
-            </div>
-          </motion.div>
+            {tab.label}
+          </button>
         ))}
       </div>
-      
-      {filteredMoves.length < moves.filter(m => m.move.name.toLowerCase().includes(search.toLowerCase())).length && (
-        <button
-          onClick={handleLoadMore}
-          className="w-full mt-4 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
-          Load More
-        </button>
+
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <th className="text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-white/10">Level</th>
+            <th className="text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-white/10">Move</th>
+            <th className="text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-white/10">Type</th>
+            <th className="text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-white/10">Category</th>
+            <th className="text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-white/10">Pwr</th>
+            <th className="text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-white/10">Acc</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredMoves.map((move) => (
+            <tr key={`${activeTab}-${move.name}`}>
+              <td className="py-4 border-b border-white/3 text-sm text-(--text-secondary)">
+                {activeTab === "level-up" ? (move.level || "—") : "—"}
+              </td>
+              <td className="py-4 border-b border-white/3 text-sm text-(--text-primary) font-medium">{formatName(move.name)}</td>
+              <td className="py-4 border-b border-white/3 text-sm text-(--text-secondary)">
+                <span className="inline-block px-2 py-0.5 rounded bg-white/10 text-[0.7rem]">—</span>
+              </td>
+              <td className="py-4 border-b border-white/3 text-sm text-(--text-secondary)">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[0.7rem] font-semibold uppercase tracking-wider bg-zinc-500/20 text-zinc-300 border border-zinc-500/30">
+                  <CategoryIcon category="status" />
+                  Unknown
+                </span>
+              </td>
+              <td className="py-4 border-b border-white/3 text-sm text-(--text-secondary)">—</td>
+              <td className="py-4 border-b border-white/3 text-sm text-(--text-secondary)">—</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {filteredMoves.length === 0 && (
+        <p className="mt-4 text-sm text-(--text-secondary)">No moves found for this category.</p>
       )}
-      
-      <p className="text-sm text-gray-500 mt-2 text-center">
-        Showing {filteredMoves.length} of {moves.filter(m => m.move.name.toLowerCase().includes(search.toLowerCase())).length} moves
-      </p>
     </div>
   );
 };
 
-export default MovesList;
+export default PokemonMoves;
