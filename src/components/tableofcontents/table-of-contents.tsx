@@ -33,7 +33,7 @@ const NavigationButton = ({ id, direction }: { id: number, direction: 'previous'
   return (
     <button onClick={() => handleNavigateToPokemon(imageId)} 
     className={`flex  cursor-pointer items-center justify-center gap-1 rounded-full border
-      border-white/10 bg-[#e5e5e5] dark:bg-[rgba(10,10,10,0.95)] px-2 lg:px-5 py-1 lg:py-1.5  shadow-[0_10px_40px_rgba(0,0,0,0.6)]
+      border-white/10 bg-white dark:bg-[rgba(10,10,10,0.95)] px-2 lg:px-5 py-1 lg:py-1.5  shadow-[0_5px_10px_rgba(0,0,0,0.2)]
        backdrop-blur-[20px] ${id === 1 ? ' hidden' : ''} ${direction === 'previous' ? '' : 'flex-row-reverse '}`}>
         
       <ChevronLeft className={`lg:w-8 lg:h-8 w-6 h-6 ${direction === 'previous' ? '' : 'rotate-180 '}`} />

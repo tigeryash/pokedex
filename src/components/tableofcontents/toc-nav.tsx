@@ -57,7 +57,7 @@ return (
         )
         }
     </div>
-    <div className="hidden lg:flex gap-1 xl:gap-2 rounded-full border border-white/10 bg-[#e5e5e5] dark:bg-[rgba(10,10,10,0.95)] p-2 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-[20px]">
+    <div className="hidden lg:flex gap-1 xl:gap-2 rounded-full border border-white/10 bg-white dark:bg-[rgba(10,10,10,0.95)] p-2 shadow-[0_5px_10px_rgba(0,0,0,0.2)] backdrop-blur-[20px]">
         {sections.map(section => (
           <button
             key={section.id}

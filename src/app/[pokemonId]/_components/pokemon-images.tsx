@@ -18,7 +18,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
 
   return (
     <div 
-      className="relative flex flex-col items-center justify-center p-8"
+      className="relative flex flex-col items-center justify-center p-8 lg:flex-1 lg:h-full"
       style={{
         background: `radial-gradient(circle at center, rgba(${rgbValues}, 0.15) 0%, rgba(5,5,5,0) 70%)`
       }}

@@ -8,7 +8,7 @@ export default function MenuLink({
   href: string;
 }) {
   return (
-    <Link href={href} className="text-[1rem] font-medium no-underline transition-colors duration-200">
+    <Link href={href} className="text-[1rem] font-medium no-underline transition-colors duration-200 xl:text-[1.4rem]">
       {label}
     </Link>
   );

@@ -1,6 +1,6 @@
 import { SectionLabel } from '@/components/section-label'
 
-const PokemonAttributes = () => {
+const PokemonPhysicalAttributes = () => {
   return (
      <div>
         <SectionLabel>Physical Specs</SectionLabel>
@@ -26,4 +26,4 @@ const PokemonAttributes = () => {
   )
 }
 
-export default PokemonAttributes
+export default PokemonPhysicalAttributes

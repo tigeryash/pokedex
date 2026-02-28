@@ -16,7 +16,7 @@ const PokemonTypes = ({types}: {types: string[]}) => {
             {types[0].charAt(0).toUpperCase() + types[0].slice(1)}
         </div>
 
-        {types[1] && (
+        {types.length === 2 && (
             <div 
                 className="px-4 py-1.5 rounded text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5"
                 style={{

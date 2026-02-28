@@ -31,29 +31,27 @@ const PokemonDetails = async ({
   const pokemon: [Pokemon, PokemonSpecies] = [pname, pspecies];
 
   return (
-    <>
-    <TableOfContents id={pokemonId} />
-    <div className="flex flex-col justify-center items-center w-full max-w-4xl mx-auto pt-12 p-4 space-y-8">
-      <PokemonImages pokemon={pokemon} />
-
-      <div>
-        <PokemonName />
-        <PokemonTypes types={pokemon[0].types.map(t => t.type.name)} />
-        <PokemonDescription description={pokemon[1].flavor_text_entries[0].flavor_text} />
-        <PokemonAbilities abilities={pokemon[0].abilities} />
-        <PokemonPhysicalAttributes />
-        <PokemonStatistics />
-        <PokemonMoves moves={pokemon[0].moves} />
-        <PokemonEvolution />
-        <PokemonTypeEffectiveness />
-        <PokemonTraining />
-        <PokemonAdditionalInfo />
-        <PokemonLocations />
+    <main className="flex items-center justify-center h-full ">
+      <TableOfContents id={pokemonId} />
+      <div className="flex flex-col lg:flex-row justify-center  items-center w-full max-w-4xl lg:max-w-full 
+      mx-auto lg:mx-0  space-y-8 ">
+        <PokemonImages pokemon={pokemon} />
+        <div className="lg:flex-1 lg:overflow-y-scroll flex flex-col gap-8 h-full ">
+          <PokemonName />
+          <PokemonTypes types={pokemon[0].types.map(t => t.type.name)} />
+          <PokemonDescription description={pokemon[1].flavor_text_entries[0].flavor_text} />
+          <PokemonAbilities abilities={pokemon[0].abilities} />
+          <PokemonPhysicalAttributes />
+          <PokemonStatistics />
+          <PokemonMoves moves={pokemon[0].moves} />
+          <PokemonEvolution />
+          <PokemonTypeEffectiveness />
+          <PokemonTraining />
+          <PokemonAdditionalInfo />
+          <PokemonLocations />
+        </div>
       </div>
-    
-    </div>
-    
-    </>
+    </main>
   );
 };
 export default PokemonDetails;

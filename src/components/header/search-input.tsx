@@ -69,12 +69,12 @@ const SearchInput = () => {
   return (
     <form
       className="flex grow-0 shrink-0 w-[45%] lg:w-[35%] items-center gap-3 rounded-full border
-       border-white/10 bg-white/5  transition-all duration-200 relative "
+       border-black/10 bg-white/5  transition-all duration-200 relative"
     >
       <Input
         ref={inputRef}
         onKeyDown={handleKeyDown}
-        className="w-full dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE]   dark:focus:bg-gray-900"
+        className="w-full dark:text-[#e5da7f] rounded-full focus:bg-[#FBF7EE] xl:text-[1rem]  dark:focus:bg-gray-900"
         placeholder="Search for a Pokemon"
         onChange={handleChange}
       />
