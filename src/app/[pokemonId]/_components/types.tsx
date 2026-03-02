@@ -11,20 +11,8 @@ const PokemonTypes = ({types}: {types: string[]}) => {
     <div className="flex gap-2 mb-6">
                 {types.map((type) => {
                     const key = type as keyof typeof PokemonTypesColors;
-
                     return (
-                        <div 
-                            key={type}
-                            className="px-4 py-1.5 rounded text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5"
-                            style={{
-                                background: PokemonTypesColorsRGBA[key],
-                                border: `1px solid ${PokemonTypesColors[key]}`,
-                                color: textColorByType[type] ?? '#ffffff'
-                            }}
-                        >
-                            <TypeBadge type={type} />
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </div>
+                        <TypeBadge type={type} />
                     )
                 })}
     </div>

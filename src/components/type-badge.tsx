@@ -4,7 +4,7 @@ import { PokemonTypes } from "@/lib/constants";
 
 export const TypeBadge = ({ type }: { type: string }) => {
   return (
-    <Badge>
+    <Badge className="gap-3 flex items-center">
       <Image 
         src={PokemonTypes[type as keyof typeof PokemonTypes]} 
         alt={type}

@@ -113,6 +113,7 @@ const PokemonDetails = async ({
     pokedex.getPokemonById(pokemonNumericId),
   ]);
   const pokemon: [Pokemon, PokemonSpecies] = [pname, pspecies];
+  console.log("Fetched Pokémon data:", pname.cries);
 
   const [evolutionResponse, locationsResponse] = await Promise.all([
     fetch(pspecies.evolution_chain.url, { cache: "force-cache" }).then((res) => res.json() as Promise<EvolutionChainResponse>),
@@ -142,9 +143,9 @@ const PokemonDetails = async ({
         <div className="min-h-0 h-full flex items-center justify-center">
           <PokemonImages pokemon={pokemon} />
         </div>
-        <div className="min-h-0 h-full overflow-y-auto pt-24 pb-10 px-4 lg:pt-28 lg:px-8">
+        <div className="min-h-0 h-full overflow-y-auto pt-24 pb-10 px-4 lg:pt-28 lg:pl-8 xl:pl-12 lg:border-l lg:border-gray-300/20">
           <div className="flex flex-col gap-8">
-          <PokemonName name={titleCase(pokemon[0].name)} />
+          <PokemonName name={titleCase(pokemon[0].name)} sound={pokemon[0].cries.latest}  />
           <PokemonTypes types={pokemon[0].types.map(t => t.type.name)} />
           <PokemonDescription description={(englishFlavorText ?? "No Pokédex entry found.").replace(/\f/g, " ")} />
           <PokemonAbilities abilities={pokemon[0].abilities} />
