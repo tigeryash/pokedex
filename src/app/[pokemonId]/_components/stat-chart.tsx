@@ -18,13 +18,13 @@ const statShortName = {
 };
 
 const statVariants = {
-  initial: { opacity: 0, scaleX: 0, transformOrigin: "left" },
+  initial: { opacity: 0, scaleX: 0, transformOrigin: "left" as const },
   whileInView: {
     opacity: 1,
     scaleX: 1,
     transition: {
       duration: 0.5,
-      ease: [0.65, 0, 0.35, 1],
+      ease: [0.65, 0, 0.35, 1] as const,
     },
   },
 };
@@ -44,7 +44,7 @@ const StatChart = ({ stats }: StatChartProps) => {
 
   return (
     <>
-      <h3 className="text-2xl font-bold text-center">Base Stats</h3>
+      <h3 className="text-2xl font-bold text-center text-orange-600 dark:text-orange-400 mb-6">Base Stats</h3>
 
       <motion.table
         ref={ref}
@@ -57,21 +57,25 @@ const StatChart = ({ stats }: StatChartProps) => {
         <tbody>
           {stats.map((stat) => (
             <motion.tr key={stat.stat.name} className="flex items-center ">
-              <td className="w-1/6 text-center">
+              <td className="w-1/6 text-center text-zinc-500 dark:text-zinc-400">
                 {statShortName[stat.stat.name as keyof typeof statShortName]}
               </td>
 
-              <td className="w-1/6 text-center">{stat.base_stat}</td>
+              <td className="w-1/6 text-center text-orange-600 dark:text-orange-400 font-semibold">{stat.base_stat}</td>
 
-              <motion.td
-                variants={statVariants}
-                initial="initial"
-                whileInView="whileInView"
-                className={`h-2 rounded-full ${colorForStat(stat.base_stat)}`}
-                style={{
-                  width: `${(stat.base_stat / 255) * 100}%`,
-                }}
-              />
+              <td className="flex-1 relative">
+                <div className="h-2 bg-zinc-100 dark:bg-[#100e0e] rounded-full overflow-hidden border border-zinc-200 dark:border-white/10">
+                  <motion.div
+                    variants={statVariants}
+                    initial="initial"
+                    whileInView="whileInView"
+                    className={`h-full rounded-full ${colorForStat(stat.base_stat)}`}
+                    style={{
+                      width: `${(stat.base_stat / 255) * 100}%`,
+                    }}
+                  />
+                </div>
+              </td>
             </motion.tr>
           ))}
         </tbody>

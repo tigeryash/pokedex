@@ -142,7 +142,7 @@ const PokemonDetails = async ({
         <div className="min-h-0 h-full flex items-center justify-center">
           <PokemonImages pokemon={pokemon} />
         </div>
-        <div className="min-h-0 min-w-0 h-full overflow-y-auto pt-24 pb-10 px-4 lg:pt-28 lg:pl-8 xl:pl-12 lg:border-l lg:border-zinc-400/70 dark:lg:border-zinc-700/60">
+        <div className="min-h-0 min-w-0 h-full overflow-y-auto pt-24 pb-10 px-4 lg:pt-28 lg:px-8 xl:px-12 lg:border-l lg:border-zinc-400/70 dark:lg:border-zinc-700/60">
           <div className="flex flex-col gap-8">
           <PokemonName name={titleCase(pokemon[0].name)} sound={pokemon[0].cries.latest}  />
           <PokemonTypes types={pokemon[0].types.map(t => t.type.name)} />

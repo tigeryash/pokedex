@@ -19,7 +19,7 @@ const PokemonAdditionalInfo = ({
   return (
     <div id="additional">
       <SectionLabel>Additional Information</SectionLabel>
-      <div className="p-5 bg-white/5 rounded-xl border border-white/5">
+      <div className="p-5 bg-zinc-50 dark:bg-[#100e0e] rounded-xl border border-zinc-200 dark:border-white/5">
         <div className="grid grid-cols-2 gap-x-8">
           <div>
             <InfoRow

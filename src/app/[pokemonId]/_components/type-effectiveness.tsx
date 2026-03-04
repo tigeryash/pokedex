@@ -69,8 +69,8 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
     <div id="effectiveness">
       <SectionLabel>Type Effectiveness</SectionLabel>
       <div className="flex flex-col gap-5">
-        <div className="p-5 bg-white/2 border border-white/5 rounded-lg">
-          <div className="text-sm font-semibold text-(--text-secondary) mb-3 uppercase tracking-wider">Weak to (2x)</div>
+        <div className="p-5 bg-zinc-50 dark:bg-[#100e0e] border border-zinc-200 dark:border-white/5 rounded-lg">
+          <div className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 mb-3 uppercase tracking-wider">Weak to (2x)</div>
           <div className="flex flex-wrap gap-2">
             {weakTo.map(type => (
               <TypeBadge
@@ -80,8 +80,8 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
             ))}
           </div>
         </div>
-        <div className="p-5 bg-white/2 border border-white/5 rounded-lg">
-          <div className="text-sm font-semibold text-(--text-secondary) mb-3 uppercase tracking-wider">Resistant to (0.5x)</div>
+        <div className="p-5 bg-zinc-50 dark:bg-[#100e0e] border border-zinc-200 dark:border-white/5 rounded-lg">
+          <div className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 mb-3 uppercase tracking-wider">Resistant to (0.5x)</div>
           <div className="flex flex-wrap gap-2">
             {resistantTo.map(type => (
               <TypeBadge
@@ -91,8 +91,8 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
             ))}
           </div>
         </div>
-        <div className="p-5 bg-white/2 border border-white/5 rounded-lg">
-          <div className="text-sm font-semibold text-(--text-secondary) mb-3 uppercase tracking-wider">Immune to (0x)</div>
+        <div className="p-5 bg-zinc-50 dark:bg-[#100e0e] border border-zinc-200 dark:border-white/5 rounded-lg">
+          <div className="text-sm font-semibold text-zinc-600 dark:text-zinc-300 mb-3 uppercase tracking-wider">Immune to (0x)</div>
           <div className="flex flex-wrap gap-2">
             {immuneTo.map(type => (
               <TypeBadge

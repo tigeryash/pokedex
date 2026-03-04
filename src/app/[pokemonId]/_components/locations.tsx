@@ -16,14 +16,14 @@ const PokemonLocations = ({ locations }: PokemonLocationsProps) => {
       <SectionLabel>Locations</SectionLabel>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3">
         {locations.map((loc, index) => (
-          <div key={index} className="p-4 bg-white/2 border border-white/5 rounded-lg">
-            <div className="text-xs font-semibold text-(--accent) uppercase tracking-wider mb-1">{loc.game}</div>
-            <div className="text-sm text-(--text-secondary)">{loc.location}</div>
+          <div key={index} className="p-4 bg-zinc-50 dark:bg-[#100e0e] border border-zinc-200 dark:border-white/5 rounded-lg">
+            <div className="text-xs font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wider mb-1">{loc.game}</div>
+            <div className="text-sm text-zinc-600 dark:text-zinc-300">{loc.location}</div>
           </div>
         ))}
       </div>
       {locations.length === 0 && (
-        <p className="mt-4 text-sm text-(--text-secondary)">No location encounters found for this Pokémon.</p>
+        <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">No location encounters found for this Pokémon.</p>
       )}
     </div>
   )

@@ -1,5 +1,5 @@
 import { SectionLabel } from '@/components/section-label'
-import { InfoRow } from './info-row'
+import { InfoRow } from './info-row';
 
 type PokemonTrainingProps = {
   baseExperience: number;
@@ -29,8 +29,8 @@ const PokemonTraining = ({
       <SectionLabel>Training & Breeding</SectionLabel>
       <div className="flex flex-col gap-4">
         {/* Training Card */}
-        <div className="p-5 bg-white/5 rounded-xl border border-white/5">
-          <div className="text-[0.7rem] font-bold text-[#404040] uppercase tracking-[0.08em] mb-1">
+        <div className="p-5 bg-zinc-50 dark:bg-[#100e0e] rounded-xl border border-zinc-200 dark:border-white/5">
+          <div className="text-[0.7rem] font-bold text-zinc-500 dark:text-[#404040] uppercase tracking-[0.08em] mb-1">
             Training
           </div>
           <div className="grid grid-cols-2 gap-x-8">
@@ -77,7 +77,7 @@ const PokemonTraining = ({
                 }
                 label="Catch Rate"
                 value={catchRate.toString()}
-                extra={<span className="text-[0.75rem] text-[#404040] font-normal"> / 255</span>}
+                extra={<span className="text-[0.75rem] text-zinc-500 dark:text-[#404040] font-normal"> / 255</span>}
                 bar
                 barWidth="17.6%"
               />
@@ -89,7 +89,7 @@ const PokemonTraining = ({
                 }
                 label="Base Happiness"
                 value={baseHappiness.toString()}
-                extra={<span className="text-[0.75rem] text-[#404040] font-normal"> / 255</span>}
+                extra={<span className="text-[0.75rem] text-zinc-500 dark:text-[#404040] font-normal"> / 255</span>}
                 bar
                 barWidth="27.5%"
               />
@@ -98,8 +98,8 @@ const PokemonTraining = ({
         </div>
 
         {/* Breeding Card */}
-        <div id="breeding" className="p-5 bg-white/5 rounded-xl border border-white/5">
-          <div className="text-[0.7rem] font-bold text-[#404040] uppercase tracking-[0.08em] mb-1">
+        <div id="breeding" className="p-5 bg-zinc-50 dark:bg-[#100e0e] rounded-xl border border-zinc-200 dark:border-white/5">
+          <div className="text-[0.7rem] font-bold text-zinc-500 dark:text-[#404040] uppercase tracking-[0.08em] mb-1">
             Breeding
           </div>
           <div className="grid grid-cols-2 gap-x-8">
@@ -136,18 +136,18 @@ const PokemonTraining = ({
                 label="Egg Group"
                 value={eggGroups.join(' / ') || 'Unknown'}
               />
-              <div className="flex items-center gap-3.5 py-3.5 border-b border-white/[0.04]">
-                <div className="w-8 h-8 bg-white/10 rounded-lg border border-white/10 flex items-center justify-center text-[#71717a] shrink-0">
+              <div className="flex items-center gap-3.5 py-3.5 border-b border-zinc-200 dark:border-white/10">
+                <div className="w-8 h-8 bg-zinc-100 dark:bg-[#100e0e] rounded-lg border border-zinc-200 dark:border-white/10 flex items-center justify-center text-zinc-500 dark:text-zinc-400 shrink-0">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <circle cx="9" cy="10" r="4" stroke="#6495ed" strokeWidth="1.8" />
                     <circle cx="15" cy="10" r="4" stroke="#ff69b4" strokeWidth="1.8" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[0.72rem] text-[#404040] uppercase tracking-[0.06em] font-semibold mb-1 flex items-center gap-1.5">
+                  <div className="text-[0.72rem] text-zinc-500 dark:text-[#404040] uppercase tracking-[0.06em] font-semibold mb-1 flex items-center gap-1.5">
                     Gender Ratio
                   </div>
-                  <div className="text-[0.95rem] font-semibold text-white">
+                  <div className="text-[0.95rem] font-semibold text-orange-600 dark:text-orange-400">
                     {genderRatio}
                   </div>
                   <div className="h-1.5 rounded-[3px] overflow-hidden flex mt-1.5">
@@ -165,3 +165,4 @@ const PokemonTraining = ({
 }
 
 export default PokemonTraining
+
