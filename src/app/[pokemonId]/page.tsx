@@ -112,7 +112,6 @@ const PokemonDetails = async ({
     pokedex.getPokemonById(pokemonNumericId),
   ]);
   const pokemon: [Pokemon, PokemonSpecies] = [pname, pspecies];
-  console.log("Fetched Pokémon data:", pname.cries);
 
   const [evolutionResponse, locationsResponse] = await Promise.all([
     fetch(pspecies.evolution_chain.url, { cache: "force-cache" }).then((res) => res.json() as Promise<EvolutionChainResponse>),

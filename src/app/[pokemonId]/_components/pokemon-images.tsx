@@ -66,7 +66,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
         <img
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon[0].id}.png`}
           alt={pokemon[0].name}
-          className="w-[90%] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)] animate-[float_6s_ease-in-out_infinite] z-10"
+          className="w-[90%] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]  z-10"
         />
         {/* Glow effect under Pokemon - dynamically colored based on type */}
         <div 

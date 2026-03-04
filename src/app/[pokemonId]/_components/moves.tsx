@@ -138,7 +138,7 @@ const PokemonMoves = ({ moves }: PokemonMovesProps) => {
   }, [filteredMoves, moveMetaByName]);
 
   return (
-    <div id="moves" className="min-h-130">
+    <div id="moves" className="min-h-130 relative">
       <SectionLabel>Moves</SectionLabel>
       <div className="flex gap-1 mb-5 border-b border-zinc-300/80 dark:border-white/10  overflow-x-auto [scrollbar-gutter:stable]">
         {tabs.map((tab) => (
@@ -229,7 +229,7 @@ const PokemonMoves = ({ moves }: PokemonMovesProps) => {
       </table>
 
       {filteredMoves.length === 0 && (
-        <p className="mt-4 text-sm text-(--text-secondary)">No moves found for this category.</p>
+        <p className="mt-4 text-sm text-(--text-secondary) absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2">No moves found for this category.</p>
       )}
     </div>
   );
