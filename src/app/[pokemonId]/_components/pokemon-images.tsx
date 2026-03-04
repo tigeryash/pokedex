@@ -30,7 +30,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       </div>
 
       {/* Gen Select and Game Select */}
-      <div className="absolute flex  bottom-6 left-0 -translate-x-1/2 z-2">
+      <div className="absolute flex  top-30 right-0 -translate-x-1/2 z-2">
         <div className="flex flex-col items-center gap-3">
           <div className="flex flex-col gap-1 p-1 bg-black/10 rounded-lg border border-white/5">
             {['Gen 1', 'Gen 2', 'Gen 3', 'Gen 4', 'Gen 5', 'Gen 6', 'Gen 7', 'Gen 8', 'Gen 9'].map(gen => (

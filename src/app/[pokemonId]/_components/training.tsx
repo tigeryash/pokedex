@@ -24,6 +24,10 @@ const PokemonTraining = ({
   eggGroups,
   genderRatio,
 }: PokemonTrainingProps) => {
+  const maleRatio = Number.parseFloat(genderRatio);
+  const safeMale = Number.isFinite(maleRatio) ? maleRatio : 0;
+  const femaleRatio = Number.isFinite(maleRatio) ? 100 - maleRatio : 0;
+  console.log(maleRatio)
   return (
     <div id="training">
       <SectionLabel>Training & Breeding</SectionLabel>
@@ -147,12 +151,13 @@ const PokemonTraining = ({
                   <div className="text-[0.72rem] text-zinc-500 dark:text-[#404040] uppercase tracking-[0.06em] font-semibold mb-1 flex items-center gap-1.5">
                     Gender Ratio
                   </div>
-                  <div className="text-[0.95rem] font-semibold text-orange-600 dark:text-orange-400">
+                  <div className="text-[0.95rem] font-semibold text-orange-600 dark:text-foreground">
                     {genderRatio}
                   </div>
                   <div className="h-1.5 rounded-[3px] overflow-hidden flex mt-1.5">
-                    <div className="bg-[#6495ed] flex-1" />
-                    <div className="bg-[#ff69b4] flex-1" />
+
+                    <div className="bg-[#6495ed] flex-1" style={{width:`${maleRatio}%`}} />
+                    <div className="bg-[#ff69b4] " style={{width: `${femaleRatio}%`}} />
                   </div>
                 </div>
               </div>

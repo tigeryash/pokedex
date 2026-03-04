@@ -29,7 +29,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   return (
     <header className="flex items-center justify-around space-x-2 sm:justify-between h-20 border-b 
-     border-white/10 z-10 px-2 md:px-10 lg:px-24 sticky top-0 w-full bg-black/5 dark:bg-black/20 backdrop-blur-2xl" >
+     border-black/10 dark:border-white/10 z-10 px-2 md:px-10 lg:px-24 sticky top-0 w-full bg-black/5 dark:bg-black/20 backdrop-blur-2xl" >
       <div className="flex items-center gap-3 text-[1.2rem] font-extrabold tracking-[-0.02em] xl:text-[2.1rem]" >
         YASHDEX
       </div>

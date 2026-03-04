@@ -126,8 +126,9 @@ const Chat = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <motion.div
+              onClick={toggleOpen}
               ref={scope}
-              className="fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-3
+              className="fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-8
              p-4 rounded-full bg-[#FBF7EE] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden"
             >
               {open ? (
@@ -190,7 +191,7 @@ const Chat = () => {
                   </motion.div>
                 </>
               ) : (
-                <ChatBubbleIcon onClick={toggleOpen} />
+                <ChatBubbleIcon  />
               )}
             </motion.div>
           </TooltipTrigger>

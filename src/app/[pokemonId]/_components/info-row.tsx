@@ -35,7 +35,7 @@ export const InfoRow = ({
             </span>
           )}
         </div>
-        <div className="text-[0.95rem] font-semibold text-orange-600 dark:text-orange-400">
+        <div className="text-[0.95rem] font-semibold text-orange-600 dark:text-foreground">
           {value}
           {extra}
         </div>

@@ -22,7 +22,7 @@ const PokemonAbilities = ({ abilities }: AbilitiesProps) => {
           {abilities.map((ability) => (
             <div key={ability.ability.name} className="p-5 bg-zinc-50 dark:bg-[#100e0e] border border-zinc-200 dark:border-white/5 rounded-lg">
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-lg font-semibold text-orange-600 dark:text-orange-400">{formatName(ability.ability.name)}</span>
+                <span className="text-lg font-semibold text-orange-600 dark:text-primary-foreground ">{formatName(ability.ability.name)}</span>
                 {ability.is_hidden && (
                   <span className="px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded">
                     Hidden

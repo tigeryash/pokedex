@@ -38,8 +38,8 @@ const PokemonStatistics = ({ stats }: PokemonStatisticsProps) => {
   return (
     <div id="stats">
       <SectionLabel>Base Statistics</SectionLabel>
-      <div className="flex flex-col gap-4 p-6 bg-white/2 rounded-xl border border-white/5">
-        <div className="grid grid-cols-[100px_1fr_60px_60px_60px] items-center gap-4 pb-3 border-b border-white/5">
+      <div className="flex flex-col gap-4 p-6 bg-white/80 dark:bg-white/2 rounded-xl border border-zinc-300/80 dark:border-white/10">
+        <div className="grid grid-cols-[100px_1fr_60px_60px_60px] items-center gap-4 pb-3 border-b border-zinc-300/80 dark:border-white/10">
           <span className="text-[0.7rem] font-semibold text-(--text-tertiary) uppercase tracking-wider text-left">Stat</span>
           <span className="text-[0.7rem] font-semibold text-(--text-tertiary) uppercase tracking-wider text-center"></span>
           <span className="text-[0.7rem] font-semibold text-(--text-tertiary) uppercase tracking-wider text-right">Base</span>
@@ -57,9 +57,9 @@ const PokemonStatistics = ({ stats }: PokemonStatisticsProps) => {
           return (
           <div key={stat.stat.name} className="grid grid-cols-[100px_1fr_60px_60px_60px] items-center gap-4">
             <span className="text-sm font-medium text-(--text-secondary) uppercase tracking-wider">{statLabelMap[stat.stat.name] ?? stat.stat.name}</span>
-            <div className="h-1 bg-white/5 rounded overflow-hidden relative">
+            <div className="h-1 bg-zinc-300/70 dark:bg-white/5 rounded overflow-hidden relative">
               <div 
-                className={`h-full rounded ${high ? 'bg-(--accent) shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'bg-(--text-secondary)'}`}
+                className={`h-full rounded ${high ? 'bg-green-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'bg-yellow-500/60'}`}
                 style={{ width }}
               />
             </div>
@@ -69,7 +69,7 @@ const PokemonStatistics = ({ stats }: PokemonStatisticsProps) => {
           </div>
         )})}
 
-        <div className="grid grid-cols-[100px_1fr_60px_60px_60px] items-center gap-4 pt-4 mt-2 border-t border-white/10">
+        <div className="grid grid-cols-[100px_1fr_60px_60px_60px] items-center gap-4 pt-4 mt-2 border-t border-zinc-300/80 dark:border-white/10">
           <span className="text-sm font-semibold text-(--text-secondary) uppercase tracking-wider">Total</span>
           <div></div>
           <span className="text-xl font-bold text-(--text-primary) text-right">{total}</span>

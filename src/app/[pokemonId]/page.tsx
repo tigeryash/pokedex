@@ -154,7 +154,7 @@ const PokemonDetails = async ({
             category={(englishGenus ?? "Unknown").replace(/ Pokémon$/i, "")}
           />
           <PokemonStatistics stats={pokemon[0].stats} />
-          <PokemonMoves moves={pokemon[0].moves} color={pokemon[0].types[0].type.name} />
+          <PokemonMoves moves={pokemon[0].moves} />
           <PokemonEvolution chain={evolutionChain} currentPokemonId={pokemonNumericId} />
           <PokemonTypeEffectiveness defendingTypes={pokemon[0].types.map((type) => type.type.name)} />
           <PokemonTraining

@@ -21,7 +21,7 @@ const PokemonPhysicalAttributes = ({
   return (
      <div>
         <SectionLabel>Physical Specs</SectionLabel>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-5">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-5 p-6 rounded-xl border border-zinc-300/80 dark:border-white/10 bg-white/80 dark:bg-white/2">
           <div className="flex flex-col gap-2">
             <span className="text-xs text-(--text-secondary) font-medium">Height</span>
             <span className="text-2xl font-semibold text-(--text-primary)">
