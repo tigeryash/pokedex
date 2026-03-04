@@ -152,3 +152,25 @@
     }
   }
 }
+
+@layer components {
+  .poke-card {
+    @apply rounded-2xl border border-zinc-400/70 dark:border-zinc-700/60 bg-zinc-50/85 dark:bg-zinc-900/55 backdrop-blur-sm;
+  }
+
+  .poke-heading {
+    @apply text-orange-500 dark:text-orange-400 font-semibold tracking-wide;
+  }
+
+  .poke-label {
+    @apply text-orange-500 dark:text-orange-400 font-medium;
+  }
+
+  .poke-text {
+    @apply text-zinc-600 dark:text-zinc-300;
+  }
+
+  .poke-muted {
+    @apply text-zinc-500 dark:text-zinc-400;
+  }
+}

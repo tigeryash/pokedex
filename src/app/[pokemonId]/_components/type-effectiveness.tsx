@@ -1,4 +1,5 @@
 import { SectionLabel } from '@/components/section-label'
+import { TypeBadge } from '@/components/type-badge';
 
 type PokemonTypeEffectivenessProps = {
   defendingTypes: string[];
@@ -62,6 +63,8 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
     .filter(([, value]) => value === 0)
     .map(([name]) => capitalize(name));
 
+    console.log(weakTo)
+
   return (
     <div id="effectiveness">
       <SectionLabel>Type Effectiveness</SectionLabel>
@@ -70,9 +73,10 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
           <div className="text-sm font-semibold text-(--text-secondary) mb-3 uppercase tracking-wider">Weak to (2x)</div>
           <div className="flex flex-wrap gap-2">
             {weakTo.map(type => (
-              <div key={type} className="px-3 py-1.5 rounded text-xs font-semibold uppercase tracking-wider border border-white/15 text-white/90 bg-white/5 backdrop-blur-sm">
-                {type}
-              </div>
+              <TypeBadge
+                key={type}
+                type={type}
+              />
             ))}
           </div>
         </div>
@@ -80,9 +84,10 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
           <div className="text-sm font-semibold text-(--text-secondary) mb-3 uppercase tracking-wider">Resistant to (0.5x)</div>
           <div className="flex flex-wrap gap-2">
             {resistantTo.map(type => (
-              <div key={type} className="px-3 py-1.5 rounded text-xs font-semibold uppercase tracking-wider border border-white/15 text-white/90 bg-white/5 backdrop-blur-sm">
-                {type}
-              </div>
+              <TypeBadge
+                key={type}
+                type={type}
+              />
             ))}
           </div>
         </div>
@@ -90,9 +95,10 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
           <div className="text-sm font-semibold text-(--text-secondary) mb-3 uppercase tracking-wider">Immune to (0x)</div>
           <div className="flex flex-wrap gap-2">
             {immuneTo.map(type => (
-              <div key={type} className="px-3 py-1.5 rounded text-xs font-semibold uppercase tracking-wider border border-white/15 text-white/90 bg-white/5 backdrop-blur-sm">
-                {type}
-              </div>
+              <TypeBadge
+                key={type}
+                type={type}
+              />
             ))}
           </div>
         </div>

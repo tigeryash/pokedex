@@ -4,9 +4,11 @@ import { useState } from "react";
 import { PokemonMove } from "pokenode-ts";
 import { SectionLabel } from "@/components/section-label";
 import { Hexagon, Target } from "lucide-react";
+import { PokemonTypesColors} from "@/lib/constants";
 
 type PokemonMovesProps = {
   moves: PokemonMove[];
+  color: string;
 };
 
 type MoveTab = "level-up" | "machine" | "egg" | "tutor";
@@ -30,7 +32,7 @@ const formatName = (value: string) =>
     .replace(/-/g, " ")
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
-const PokemonMoves = ({ moves }: PokemonMovesProps) => {
+const PokemonMoves = ({ moves, color }: PokemonMovesProps) => {
   const [activeTab, setActiveTab] = useState<MoveTab>("level-up");
 
   if (!moves || moves.length === 0) {
@@ -67,8 +69,8 @@ const PokemonMoves = ({ moves }: PokemonMovesProps) => {
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 text-sm font-medium bg-transparent border-none cursor-pointer relative whitespace-nowrap transition-colors ${
               activeTab === tab.id
-                ? "text-(--text-primary) border-b-2 border-(--accent)"
-                : "text-(--text-secondary) border-b-2 border-transparent"
+                ? `border-b-2 border-[${PokemonTypesColors[color as keyof typeof PokemonTypesColors]}]`
+                : "opacity-60 hover:opacity-100 border-b-2 border-transparent"
             }`}
           >
             {tab.label}

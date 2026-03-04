@@ -1,4 +1,3 @@
-
 import { Pokemon, PokemonClient, PokemonSpecies } from "pokenode-ts";
 import TableOfContents from "../../components/tableofcontents/table-of-contents";
 import PokemonImages from "./_components/pokemon-images";
@@ -137,13 +136,13 @@ const PokemonDetails = async ({
     .join(", ");
 
   return (
-    <main className="h-[calc(100dvh-5rem)] overflow-hidden w-full">
+    <main className="h-[calc(100dvh-5rem)] overflow-hidden w-full bg-zinc-100 dark:bg-zinc-950">
       <TableOfContents id={pokemonId} />
       <div className="grid h-full w-full grid-cols-1 lg:grid-cols-[minmax(360px,700px)_minmax(0,1fr)]">
         <div className="min-h-0 h-full flex items-center justify-center">
           <PokemonImages pokemon={pokemon} />
         </div>
-        <div className="min-h-0 min-w-0 h-full overflow-y-auto pt-24 pb-10 px-4 lg:pt-28 lg:pl-8 xl:pl-12 lg:border-l lg:border-gray-300/20">
+        <div className="min-h-0 min-w-0 h-full overflow-y-auto pt-24 pb-10 px-4 lg:pt-28 lg:pl-8 xl:pl-12 lg:border-l lg:border-zinc-400/70 dark:lg:border-zinc-700/60">
           <div className="flex flex-col gap-8">
           <PokemonName name={titleCase(pokemon[0].name)} sound={pokemon[0].cries.latest}  />
           <PokemonTypes types={pokemon[0].types.map(t => t.type.name)} />
@@ -155,7 +154,7 @@ const PokemonDetails = async ({
             category={(englishGenus ?? "Unknown").replace(/ Pokémon$/i, "")}
           />
           <PokemonStatistics stats={pokemon[0].stats} />
-          <PokemonMoves moves={pokemon[0].moves} />
+          <PokemonMoves moves={pokemon[0].moves} color={pokemon[0].types[0].type.name} />
           <PokemonEvolution chain={evolutionChain} currentPokemonId={pokemonNumericId} />
           <PokemonTypeEffectiveness defendingTypes={pokemon[0].types.map((type) => type.type.name)} />
           <PokemonTraining

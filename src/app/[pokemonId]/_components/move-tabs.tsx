@@ -1,8 +1,14 @@
 import { useState } from "react";
 
-const MoveTabs = () => {
-  const [activeTab, setActiveTab] = useState('Level Up');
-  const tabs = ['Level Up', 'TM Moves', 'Egg Moves', 'Tutor Moves'];
+type MoveLearnMethod = "level-up" | "machine" | "egg" | "tutor";
+
+type MoveTabsProps = {
+  tab: MoveLearnMethod;
+};
+
+const MoveTabs = ({tab}: MoveTabsProps) => {
+  const [activeTab, setActiveTab] = useState<MoveLearnMethod>('level-up');
+  const tabs: MoveLearnMethod[] = ['level-up', 'machine', 'egg', 'tutor'];
 
   return (
     <div 
@@ -22,3 +28,5 @@ const MoveTabs = () => {
     </div>
   );
 };
+
+export default MoveTabs;
