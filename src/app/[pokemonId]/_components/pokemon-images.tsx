@@ -1,12 +1,11 @@
 'use client'
 
 import { Pokemon, PokemonSpecies } from "pokenode-ts";
-import { useState } from "react";
 import { PokemonTypesColorsRGBA } from "@/lib/constants";
+import {GameSelect} from "./game-select";
+import GenSelect from "./gen-select";
 
 const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
-  const [activeGen, setActiveGen] = useState('Gen 1');
-  const [activeGame, setActiveGame] = useState('Red');
   
   // Get the first type of the Pokemon for dynamic glow colors
   const firstType = pokemon[0].types[0]?.type.name as keyof typeof PokemonTypesColorsRGBA;
@@ -24,40 +23,14 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       }}
     >
       {/* Pokemon Number */}
-      <div className="absolute top-0 left-0 md:left-[10%] lg:top-[10%] font-mono text-[4.2rem] font-bold text-black/60 dark:text-white/30
+      <div className="absolute top-0 left-0 md:left-[10%] lg:top-[10%] font-mono text-[3rem] md:text-[4.2rem] font-bold text-black/60 dark:text-white/30
        pointer-events-none text-shadow-drop dark:text-shadow-white">
         #{pokemon[0].id.toString().padStart(3, '0')}
       </div>
 
       {/* Gen Select and Game Select */}  
-        <div className="flex flex-col items-center gap-3 absolute bottom-0 -right-3 md:right-[8%] lg:bottom-8 z-1">
-          <div className="flex flex-col gap-1 p-1 bg-black/10 rounded-lg border border-white/5">
-            {['Gen 1', 'Gen 2', 'Gen 3', 'Gen 4', 'Gen 5', 'Gen 6', 'Gen 7', 'Gen 8', 'Gen 9'].map(gen => (
-              <button
-                key={gen}
-                onClick={() => setActiveGen(gen)}
-                className={`px-6 py-1 text-xs font-medium rounded transition-all duration-200 ${
-                  activeGen === gen 
-                    ? 'bg-white/10 text-foreground' 
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {gen}
-              </button>
-            ))}
-          </div>
-        </div>
-          <select
-            value={activeGame}
-            onChange={(e) => setActiveGame(e.target.value)}
-            className="bg-black/10 absolute -left-3  bottom-0 md:left-[8%] lg:bottom-8 z-1 border border-white/10 rounded-md px-3 py-1.5 text-sm font-medium text-foreground cursor-pointer outline-none hover:bg-black/20 transition-colors"
-          >
-              <option>Red</option>
-              <option>Blue</option>
-              <option>Yellow</option>
-  
-      
-          </select>
+      <GameSelect gen={0} />
+      <GenSelect />
 
       {/* Main Pokemon Image Container */}
       <div className="relative w-full max-w-[320px] aspect-square flex items-center justify-center perspective-1000">
@@ -76,7 +49,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       </div>
 
       {/* Navigation Dots */}
-      <div className="absolute -bottom-0 lg:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-[rgba(10,10,10,0.8)] backdrop-blur-xl px-1 lg:px-5 lg:py-2.5 rounded-full border border-white/10 z-1 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="absolute -bottom-[20px] md:-bottom-10 lg:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-white dark:bg-black backdrop-blur-xl px-1 lg:px-5 lg:py-2.5 rounded-full border border-white/10 z-1 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <button className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer">
           ←
         </button>

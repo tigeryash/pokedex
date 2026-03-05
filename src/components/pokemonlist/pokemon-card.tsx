@@ -6,7 +6,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Pokemon } from "pokenode-ts";
-import { motion } from "framer-motion";
+
+const PokemonCardSkeleton = () => (
+  <div className="skeleton h-24 w-full rounded-xl bg-gray-700 shadow-lg md:h-76" />
+);
 
 const PokemonCard = ({ name }: { name: string }) => {
   const [pokemonData, setPokemonData] = useState<Pokemon | null>(null);
@@ -35,21 +38,16 @@ const PokemonCard = ({ name }: { name: string }) => {
   }, [name]);
 
   if (loading) {
-    return (
-      <div className="skeleton w-full h-24 shadow-lg rounded-xl bg-gray-700"></div>
-    );
+    return <PokemonCardSkeleton />;
   }
 
   if (error || !pokemonData) {
     return <div>Error loading Pokémon data. Please try again later.</div>;
   }
+
   if (pokemonData) {
     return (
-      <motion.div
-   
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      <div
         className="bg-[#FBF7EE] dark:bg-indigo-950 shadow-xl  py-3 sm:px-2 md:px-0 rounded-md flex md:flex-col justify-between relative border-t-4  border-b-4"
         style={{
           borderTopColor:
@@ -77,7 +75,7 @@ const PokemonCard = ({ name }: { name: string }) => {
           onClick={() => {
             router.push(`/${pokemonData.id}`);
           }}
-          className="h-auto w-[100px] sm:w-[150px] md:w-[150px] lg:w-[200px] xl:w-[250px] 2xl:w-[300px] md:px-2"
+          className="h-auto w-25 sm:w-37.5 md:w-37.5 lg:w-50 xl:w-62.5 2xl:w-75 md:px-2"
         />
         <div className="flex flex-col lg:flex-row justify-between md:border-t border-gray-600 px-2">
           <div className="flex flex-col ">
@@ -114,7 +112,7 @@ const PokemonCard = ({ name }: { name: string }) => {
             ))}
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 };

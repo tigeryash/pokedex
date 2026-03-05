@@ -21,7 +21,8 @@ const PokemonEvolution = ({ chain, currentPokemonId }: PokemonEvolutionProps) =>
   return (
 <div id="evolution">
         <SectionLabel>Evolution Chain</SectionLabel>
-        <div className="flex items-center justify-start md:justify-center gap-5  p-6 bg-zinc-50 dark:bg-[#100e0e] rounded-xl border border-zinc-200 dark:border-white/5 overflow-x-auto">
+        <div className={`flex items-center  md:justify-center gap-5  p-6 bg-zinc-50
+         dark:bg-[#100e0e] rounded-xl border border-zinc-200 dark:border-white/5 overflow-x-auto ${chain.length === 1 ? 'justify-center' : 'justify-start'} `}>
           {chain.map((pokemon, index) => (
             <div key={pokemon.id} className="flex items-center gap-5">
               <div className="flex flex-col items-center gap-2 min-w-24">

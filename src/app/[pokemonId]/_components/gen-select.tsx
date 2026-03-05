@@ -1,23 +1,33 @@
-import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-export const GenSelector = () => {
-  const [activeGen, setActiveGen] = useState('Gen 1');
-  const generations = ['Gen 1', 'Gen 2', 'Gen 3', 'Gen 4', 'Gen 5', 'Gen 6', 'Gen 7', 'Gen 8', 'Gen 9'];
-
+const GenSelect = () => {
   return (
-    <div
-        className="flex gap-1 bg-white/5 p-1 rounded-sm border border-white/5"
-  >
-      {generations.map(gen => (
-        <button
-          key={gen}
-          onClick={() => setActiveGen(gen)}
-          className={`py-1 px-3 text-[.75rem] rounded-sm pointer transition-all duration-200 
-             ${activeGen === gen ? 'bg-white/10 text-white' : 'text-[#71717a] hover:bg-white/10 bg-transparent hover:text-white'}`}
-        >
-          {gen}
-        </button>
-      ))}
-    </div>
-  );
-};
+    
+    <div className="flex flex-col items-center gap-1 md:gap-3 absolute -bottom-4 md:-bottom-10 
+    -right-2 md:right-[8%] lg:bottom-26 lg:right-[4%] xl:right-[8%] xl:bottom-10 z-1 w-21">
+        <Select defaultValue="Gen" >
+            <SelectTrigger className="bg-background">
+            <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem key={'gen'} value={'Gen'} className="hidden">
+                Gen
+                </SelectItem>
+            {Array.from({ length: 9 }, (_, gen) => (
+                <SelectItem key={gen} value={`Gen ${gen + 1}`}>
+                {`Gen ${gen + 1}`}
+                </SelectItem>
+            ))}
+            </SelectContent>
+      </Select>
+      </div>
+  )
+}
+
+export default GenSelect

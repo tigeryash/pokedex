@@ -23,8 +23,9 @@ const PokemonName = ({ name, sound }: PokemonNameProps) => {
     };
   }
   return (
-    <div className="flex items-center gap-4 mb-3">
-        <h1 className="m-0 text-6xl font-bold tracking-tight bg-linear-to-b from-zinc-800 to-zinc-500 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
+    <div className="flex items-center gap-4 mb-3 overflow-visible ">
+        <h1 className="m-0 text-6xl font-bold tracking-tight bg-linear-to-b from-zinc-800 
+        to-zinc-500 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent pb-2">
         {name}
         </h1>
         <button onClick={handleClick} className=" border border-black/10 rounded-full w-10 h-10 flex items-center justify-center text-(--text-secondary) cursor-pointer

@@ -137,8 +137,8 @@ const PokemonDetails = async ({
   return (
     <main className="h-[calc(100dvh-5rem)] overflow-hidden w-full bg-zinc-100 dark:bg-zinc-950">
       <TableOfContents id={pokemonId} />
-      <div className="grid h-full w-full grid-cols-1 lg:grid-cols-[minmax(320px,700px)_minmax(600px,1fr)]">
-        <div className="min-h-1/3 lg:h-full flex items-center justify-center pt-12 pb-6 px-4 lg:px-0 ">
+      <div className="grid h-full w-full grid-cols-1 lg:grid-cols-[minmax(320px,700px)_minmax(66%,1fr)]">
+        <div className="min-h-1/3 lg:h-full flex items-center justify-center pt-12 pb-6 px-4 md:pb-10 lg:px-0 ">
           <PokemonImages pokemon={pokemon} />
         </div>
         <div className="min-h-0 min-w-0 h-full overflow-y-auto pt-10 pb-10 px-4 lg:pt-28 lg:px-8 xl:px-12 lg:border-l lg:border-zinc-400/70 dark:lg:border-zinc-700/60">
