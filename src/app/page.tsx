@@ -1,4 +1,4 @@
-import Chat from "@/components/chat/chat";
+import Chat from "@/components/chat/chat-container";
 import PokemonList from "@/components/pokemonlist/pokemon-list";
 import Header from "@/components/header/header";
 import ThemeToggle from "@/components/theme-toggle";

@@ -12,23 +12,22 @@ import { motion, useAnimate } from "framer-motion";
 import ChatInput from "./chat-input";
 import webcamStore from "@/stores/webcamstore";
 import WebcamUi from "../webcam-ui";
-
-interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-}
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, type FileUIPart, type UIMessage } from "ai";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
   const [scope, animate] = useAnimate();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const showWebCam = webcamStore((state) => state.showWebCam);
-  const camImage = webcamStore((state) => state.camImage);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { messages, sendMessage, status } = useChat({
+    transport: new DefaultChatTransport({ api: "/api/chat" }),
+  });
+  const isLoading = status === "submitted" || status === "streaming";
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -37,68 +36,39 @@ const Chat = () => {
     setOpen(!open);
   };
 
-  const handleSubmit = async (input: string) => {
-    if (!input.trim()) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: input,
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
-      });
-
-      if (!response.ok) throw new Error("Failed to get response");
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let assistantMessage = "";
-
-      const assistantMessageObj: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: "",
-      };
-
-      setMessages((prev) => [...prev, assistantMessageObj]);
-
-      while (reader) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        assistantMessage += chunk;
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantMessageObj.id
-              ? { ...m, content: assistantMessage }
-              : m
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Chat error:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: "Sorry, I encountered an error. Please try again.",
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+  const handleSend = async ({
+    text,
+    imageUrl,
+    mediaType,
+  }: {
+    text: string;
+    imageUrl?: string;
+    mediaType?: string;
+  }) => {
+    if (!text.trim() && !imageUrl) {
+      return;
     }
+
+    const files: FileUIPart[] | undefined = imageUrl
+      ? [
+          {
+            type: "file",
+            url: imageUrl,
+            mediaType: mediaType ?? "image/jpeg",
+          },
+        ]
+      : undefined;
+
+    await sendMessage({ text, files });
+  };
+
+  const getTextFromMessage = (message: UIMessage) => {
+    const textParts = message.parts.filter((part) => part.type === "text");
+    if (textParts.length === 0) {
+      return "";
+    }
+
+    return textParts.map((part) => part.text).join("\n");
   };
 
   useEffect(() => {
@@ -126,10 +96,10 @@ const Chat = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <motion.div
-              onClick={toggleOpen}
               ref={scope}
-              className="fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-8
-             p-4 rounded-full bg-[#FBF7EE] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden"
+                className={`fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-8
+              rounded-full bg-[#FBF7EE] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden 
+              ${open ? "w-80 h-96 p-4" : "w-12 h-12"}`}
             >
               {open ? (
                 <>
@@ -156,13 +126,27 @@ const Chat = () => {
                         <div className="chat-header">
                           {msg.role === "user" ? "Trainer" : "Professor"}
                         </div>
-                        <div className="chat-bubble">
-                          {msg.content}
+                        <div className="chat-bubble whitespace-pre-wrap">
+                          {getTextFromMessage(msg)}
                         </div>
+                        {msg.parts
+                          .filter((part) => part.type === "file")
+                          .map((part) =>
+                            part.mediaType.startsWith("image/") ? (
+                              <img
+                                key={part.url}
+                                src={part.url}
+                                alt="Attached by trainer"
+                                className="rounded-lg max-w-36 border border-[#313139]/20"
+                              />
+                            ) : null
+                          )}
                       </div>
                     ))}
 
-                    {isLoading && messages.length > 0 && messages[messages.length - 1].role !== "assistant" && (
+                    {isLoading &&
+                      messages.length > 0 &&
+                      messages[messages.length - 1].role !== "assistant" && (
                       <div className="chat chat-start">
                         <div className="chat-header">Professor</div>
                         <div className="chat-bubble">
@@ -185,13 +169,15 @@ const Chat = () => {
                     className="mt-2 w-full"
                   >
                     <ChatInput 
-                      onSubmit={handleSubmit}
                       isLoading={isLoading}
+                      onSend={handleSend}
                     />
                   </motion.div>
                 </>
               ) : (
-                <ChatBubbleIcon  />
+                <button onClick={toggleOpen} className="flex items-center justify-center w-full h-full">
+                  <ChatBubbleIcon  />
+                </button>
               )}
             </motion.div>
           </TooltipTrigger>
