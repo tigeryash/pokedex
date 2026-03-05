@@ -125,7 +125,7 @@ export const PackageInfoChangeType = ({
         changeTypeStyles[changeType],
         className
       )}
-      variant="secondary"
+      variant="default"
       {...props}
     >
       {changeTypeIcons[changeType]}

@@ -319,7 +319,7 @@ export const EnvironmentVariableRequired = ({
   children,
   ...props
 }: EnvironmentVariableRequiredProps) => (
-  <Badge className={cn("text-xs", className)} variant="secondary" {...props}>
+  <Badge className={cn("text-xs", className)} variant="default" {...props}>
     {children ?? "Required"}
   </Badge>
 );

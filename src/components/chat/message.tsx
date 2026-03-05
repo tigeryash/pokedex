@@ -9,7 +9,6 @@ import {
 } from "@/components/ai-elements/message";
 import type { UIMessage } from "ai";
 import { RefreshCcwIcon } from "lucide-react";
-import { useState } from "react";
 import {
   Attachment,
   AttachmentPreview,
@@ -29,6 +28,8 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
   const from = message.role === "assistant" || message.role === "user"
     ? message.role
     : "assistant";
+
+    console.log("Rendering message:", { id: message.id, from, text, attachments });
 
   return (
     <Message from={from}>
@@ -104,16 +105,19 @@ type ActionsProps = {
 
 const Actions = ({ messageId, onRetry }: ActionsProps) => {
   
-  const {regenerate, status} = useChat()
+  const { status } = useChat();
   const handleRetry = async () => {
-    regenerate({messageId})
+    if(status === "streaming" ) {
+      return;
+    }
+    await onRetry(messageId);
   };
 
   return (
-    <MessageActions>
+    <MessageActions className="mt-1 px-0">
       <MessageAction
         disabled={status === "submitted" || status === "streaming"}
-        className={`${status === "submitted" || status === "streaming" ? "cursor-not-allowed hidden" : "" }`}
+        className={`${status === "submitted" || status === "streaming" ? "cursor-not-allowed hidden ml-0 pl-0" : "" }`}
         label="Retry"
         onClick={handleRetry}
         tooltip="Regenerate response"
