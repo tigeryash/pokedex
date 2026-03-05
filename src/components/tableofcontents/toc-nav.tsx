@@ -38,7 +38,7 @@ return (
         </button>
         {isOpen && (
             <div className="absolute top-full left-0 mt-2 w-full rounded-lg border
-             border-white/10 bg-white dark:bg-[rgba(10,10,10,0.95)] p-2 shadow-[0_10px_40px_rgba(0,0,0,0.6)] backdrop-blur-[20px]
+             border-white/10 bg-white dark:bg-[rgba(10,10,10,0.95)] p-2 shadow-[0_6px_9px_rgba(0,0,0,0.1)] backdrop-blur-[20px]
              lg:hidden">
                 {sections.map(section => (
                     <button

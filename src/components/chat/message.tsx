@@ -15,6 +15,11 @@ import {
   Attachments,
 } from "../ai-elements/attachments";
 import { useChat } from "@ai-sdk/react";
+import {
+  Reasoning,
+  ReasoningContent,
+  ReasoningTrigger,
+} from "../ai-elements/reasoning";
 
 type ChatMessageProps = {
   message: UIMessage;
@@ -29,13 +34,11 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
     ? message.role
     : "assistant";
 
-    console.log("Rendering message:", { id: message.id, from, text, attachments });
-
   return (
     <Message from={from}>
       <div>
         <MessageAttachments attachments={attachments} />
-        <MessageBody from={from} text={text} />
+        <MessageBody from={from} message={message} text={text} />
         {from === "assistant" ? (
           <Actions messageId={message.id} onRetry={onRetry} />
         ) : null}
@@ -51,13 +54,38 @@ type ChatRole = "user" | "assistant";
 type MessageBodyProps = {
   from: ChatRole;
   text: string;
+  message: UIMessage;
 };
 
-const MessageBody = ({ from, text }: MessageBodyProps) => (
+type ReasoningPart = Extract<UIMessage["parts"][number], { type: "reasoning" }>;
+
+const MessageBody = ({ from, text, message }: MessageBodyProps) => {
+  const reasoningParts = message.parts.filter(
+    (part): part is ReasoningPart => part.type === "reasoning"
+  );
+  const hasReasoning = reasoningParts.length > 0;
+  const isReasoningStreaming = reasoningParts.some(
+    (part) => part.state === "streaming"
+  );
+  const reasoningText = reasoningParts.map((part) => part.text).join("\n\n");
+
+  return (
   <MessageContent>
-    {from === "assistant" ? <MessageResponse>{text}</MessageResponse> : text}
+    {from === "assistant" ? (
+      <>
+        {hasReasoning ? (
+          <Reasoning className="w-full" isStreaming={isReasoningStreaming}>
+            <ReasoningTrigger />
+          </Reasoning>
+        ) : null}
+        <MessageResponse>{text}</MessageResponse>
+      </>
+    ) : (
+      text
+    )}
   </MessageContent>
-);
+  );
+};
 
 type MessageAttachmentsProps = {
   attachments: FilePart[];

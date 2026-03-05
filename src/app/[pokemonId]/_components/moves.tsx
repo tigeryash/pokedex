@@ -145,7 +145,7 @@ const PokemonMoves = ({ moves }: PokemonMovesProps) => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 z-10 py-2 text-sm font-medium bg-transparent cursor-pointer relative whitespace-nowrap transition-colors border-b-4 ${
+            className={`px-4 z-2 py-2 text-sm font-medium bg-transparent cursor-pointer relative whitespace-nowrap transition-colors border-b-4 ${
               activeTab === tab.id
                 ? "opacity-100 border-[#ee741a] dark:border-[#240e62]"
                 : "opacity-50 hover:opacity-100 border-transparent"

@@ -49,7 +49,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       </div>
 
       {/* Navigation Dots */}
-      <div className="absolute -bottom-[20px] md:-bottom-10 lg:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-white dark:bg-black backdrop-blur-xl px-1 lg:px-5 lg:py-2.5 rounded-full border border-white/10 z-1 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="absolute -bottom-[20px] md:-bottom-10 lg:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-white dark:bg-black backdrop-blur-xl px-1 lg:px-5 lg:py-2.5 rounded-full border border-white/10 z-1 shadow-[0_6px_9px_rgba(0,0,0,0.1)]">
         <button className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer">
           ←
         </button>

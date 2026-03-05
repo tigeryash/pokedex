@@ -1,7 +1,7 @@
 "use client";
 
 import { ChatBubbleIcon, Cross1Icon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -19,6 +19,8 @@ import ChatHistory from "./chat-history";
 const Chat = () => {
   const [open, setOpen] = useState(false);
   const [scope, animate] = useAnimate();
+  const chatPanelRef = useRef<HTMLDivElement>(null);
+  const previousFocusedElementRef = useRef<HTMLElement | null>(null);
 
   const showWebCam = webcamStore((state) => state.showWebCam);
 
@@ -78,6 +80,70 @@ const Chat = () => {
     }
   }, [open, animate, scope]);
 
+  useEffect(() => {
+    if (!open) {
+      previousFocusedElementRef.current?.focus();
+      return;
+    }
+
+    previousFocusedElementRef.current = document.activeElement as HTMLElement | null;
+
+    const panel = chatPanelRef.current;
+    if (!panel) {
+      return;
+    }
+
+    const focusableSelector =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    const focusable = Array.from(
+      panel.querySelectorAll<HTMLElement>(focusableSelector)
+    );
+
+    const initialFocus =
+      panel.querySelector<HTMLElement>("textarea:not([disabled])") ?? focusable[0];
+    initialFocus?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const tabbable = Array.from(
+        panel.querySelectorAll<HTMLElement>(focusableSelector)
+      );
+
+      if (tabbable.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = tabbable[0];
+      const last = tabbable[tabbable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+        return;
+      }
+
+      if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
   return (
     <>
       <TooltipProvider>
@@ -85,12 +151,15 @@ const Chat = () => {
           <TooltipTrigger asChild>
             <motion.div
               ref={scope}
-                className={`fixed z-5 flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-4 lg:right-8
+              aria-label={open ? "Professor chat" : undefined}
+              aria-modal={open ? true : undefined}
+              className={`fixed z-5 flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-4 lg:right-8
               rounded-full bg-[#FBF7EE] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden 
               ${open ? "w-80 h-96 p-4" : "w-12 h-12"}`}
+              role={open ? "dialog" : undefined}
             >
               {open ? (
-                <>
+                <div ref={chatPanelRef} className="flex h-full w-full flex-col">
                   <div className="flex justify-between items-center mb-2 w-full">
                     <h2 className="text-lg font-semibold text-[] dark:text-[#FEFEFE]">
                       Professor 🥸
@@ -123,7 +192,7 @@ const Chat = () => {
                       onSend={handleSend}
                     />
                   </motion.div>
-                </>
+                </div>
               ) : (
                 <button onClick={toggleOpen} className="flex items-center justify-center w-full h-full">
                   <ChatBubbleIcon  />
