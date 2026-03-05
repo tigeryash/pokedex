@@ -18,20 +18,19 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
 
   return (
     <div 
-      className="relative flex flex-col items-center justify-center p-8 lg:flex-1 lg:h-full"
+      className="relative flex flex-col items-center justify-center p-0 lg:p-8 lg:flex-1 h-full w-full"
       style={{
         background: `radial-gradient(circle at center, rgba(${rgbValues}, 0.15) 0%, rgba(5,5,5,0) 70%)`
       }}
     >
       {/* Pokemon Number */}
-      <div className="absolute top-6 left-6  font-mono text-[3rem] font-bold text-black/60 dark:text-white/30
+      <div className="absolute top-0 left-0 md:left-[10%] lg:top-[10%] font-mono text-[4.2rem] font-bold text-black/60 dark:text-white/30
        pointer-events-none text-shadow-drop dark:text-shadow-white">
         #{pokemon[0].id.toString().padStart(3, '0')}
       </div>
 
-      {/* Gen Select and Game Select */}
-      <div className="absolute flex  top-30 right-0 -translate-x-1/2 z-2">
-        <div className="flex flex-col items-center gap-3">
+      {/* Gen Select and Game Select */}  
+        <div className="flex flex-col items-center gap-3 absolute bottom-0 -right-3 md:right-[8%] lg:bottom-8 z-1">
           <div className="flex flex-col gap-1 p-1 bg-black/10 rounded-lg border border-white/5">
             {['Gen 1', 'Gen 2', 'Gen 3', 'Gen 4', 'Gen 5', 'Gen 6', 'Gen 7', 'Gen 8', 'Gen 9'].map(gen => (
               <button
@@ -47,10 +46,11 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
               </button>
             ))}
           </div>
+        </div>
           <select
             value={activeGame}
             onChange={(e) => setActiveGame(e.target.value)}
-            className="bg-black/10 border border-white/10 rounded-md px-3 py-1.5 text-sm font-medium text-foreground cursor-pointer outline-none hover:bg-black/20 transition-colors"
+            className="bg-black/10 absolute -left-3  bottom-0 md:left-[8%] lg:bottom-8 z-1 border border-white/10 rounded-md px-3 py-1.5 text-sm font-medium text-foreground cursor-pointer outline-none hover:bg-black/20 transition-colors"
           >
               <option>Red</option>
               <option>Blue</option>
@@ -58,19 +58,17 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
   
       
           </select>
-        </div>
-      </div>
 
       {/* Main Pokemon Image Container */}
-      <div className="relative w-full max-w-[400px] aspect-square flex items-center justify-center perspective-1000">
+      <div className="relative w-full max-w-[320px] aspect-square flex items-center justify-center perspective-1000">
         <img
           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon[0].id}.png`}
           alt={pokemon[0].name}
-          className="w-[90%] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]  z-10"
+          className="w-[70%] md:w-[90%] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]  z-10"
         />
         {/* Glow effect under Pokemon - dynamically colored based on type */}
         <div 
-          className="absolute -bottom-10 w-4/5 h-5 opacity-60 blur-lg scale-y-50"
+          className="absolute bottom-[80px] z-1 lg:-bottom-10 w-4/5 h-5 opacity-60 blur-lg scale-y-50"
           style={{
             background: `radial-gradient(ellipse at center, rgba(${rgbValues}, 0.4), transparent 70%)`
           }}
@@ -78,7 +76,7 @@ const PokemonImages = ({pokemon}: {pokemon: [Pokemon, PokemonSpecies]}) => {
       </div>
 
       {/* Navigation Dots */}
-      <div className="absolute bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-[rgba(10,10,10,0.8)] backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/10 z-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="absolute -bottom-0 lg:bottom-[30px] left-1/2 -translate-x-1/2 flex gap-5 bg-[rgba(10,10,10,0.8)] backdrop-blur-xl px-1 lg:px-5 lg:py-2.5 rounded-full border border-white/10 z-1 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <button className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer">
           ←
         </button>

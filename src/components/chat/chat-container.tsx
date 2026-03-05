@@ -85,7 +85,7 @@ const Chat = () => {
           <TooltipTrigger asChild>
             <motion.div
               ref={scope}
-                className={`fixed flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-8
+                className={`fixed z-5 flex flex-col items-center justify-center text-[#EE7318] dark:text-[#E5DA7F] bottom-4 right-8
               rounded-full bg-[#FBF7EE] dark:bg-[#240E62] border-2 border-[#EE7318] dark:border-[#E5DA7F] overflow-x-hidden 
               ${open ? "w-80 h-96 p-4" : "w-12 h-12"}`}
             >

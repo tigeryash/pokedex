@@ -156,77 +156,79 @@ const PokemonMoves = ({ moves }: PokemonMovesProps) => {
         ))}
       </div>
 
-      <table className="w-full border-collapse min-h-115 table-fixed">
-        <thead>
-          <tr>
-            <th className="w-[10%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Level</th>
-            <th className="w-[30%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Move</th>
-            <th className="w-[16%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Type</th>
-            <th className="w-[20%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Category</th>
-            <th className="w-[12%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Pwr</th>
-            <th className="w-[12%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Acc</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredMoves.map((move) => {
-            const moveMeta = moveMetaByName[move.name];
-            const moveType = moveMeta?.type;
-            const typeColor = moveType
-              ? PokemonTypesColors[moveType as keyof typeof PokemonTypesColors]
-              : undefined;
-            const damageClass = moveMeta?.damageClass;
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[720px] border-collapse min-h-115 table-fixed">
+          <thead>
+            <tr>
+              <th className="w-[10%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Level</th>
+              <th className="w-[30%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Move</th>
+              <th className="w-[16%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Type</th>
+              <th className="w-[20%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Category</th>
+              <th className="w-[12%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Pwr</th>
+              <th className="w-[12%] text-left py-3 text-[0.7rem] uppercase text-(--text-tertiary) font-semibold border-b border-zinc-300/80 dark:border-white/10">Acc</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredMoves.map((move) => {
+              const moveMeta = moveMetaByName[move.name];
+              const moveType = moveMeta?.type;
+              const typeColor = moveType
+                ? PokemonTypesColors[moveType as keyof typeof PokemonTypesColors]
+                : undefined;
+              const damageClass = moveMeta?.damageClass;
 
-            return (
-              <tr key={`${activeTab}-${move.name}`} className="hover:bg-zinc-300/20 dark:hover:bg-white/10 rounded-lg ">
-                <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary) pl-2">
-                  {activeTab === "level-up" ? move.level || "—" : "—"}
-                </td>
-                <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-primary) font-medium">
-                  {formatName(move.name)}
-                </td>
-                <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
-                  {moveType && typeColor ? (
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[0.7rem] font-semibold text-white opacity-85" style={{ backgroundColor: typeColor }}>
-                      <Image
-                        src={PokemonTypes[moveType as keyof typeof PokemonTypes]}
-                        alt={moveType}
-                        width={14}
-                        height={14}
-                        className="w-3.5 h-3.5"
-                      />
-                      {formatName(moveType)}
-                    </span>
-                  ) : (
-                    <span className="inline-block px-2 py-0.5 rounded bg-zinc-200 dark:bg-white/10 text-[0.7rem]">—</span>
-                  )}
-                </td>
-                <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
-                  {damageClass ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[0.7rem] font-semibold uppercase tracking-wider bg-zinc-800/10 text-white border border-zinc-500/30">
-                      <Image
-                        src={categoryImageMap[damageClass]}
-                        alt={damageClass}
-                        width={14}
-                        height={14}
-                        className="w-3.5 h-3.5"
-                      />
-                      {damageClass}
-                    </span>
-                  ) : (
-                    "—"
-                  )}
-                </td>
-                <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
-                  {moveMeta?.power ?? "—"}
-                </td>
-                <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
-                  {moveMeta?.accuracy ?? "—"}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={`${activeTab}-${move.name}`} className="hover:bg-zinc-300/20 dark:hover:bg-white/10 rounded-lg ">
+                  <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary) pl-2">
+                    {activeTab === "level-up" ? move.level || "—" : "—"}
+                  </td>
+                  <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-primary) font-medium">
+                    {formatName(move.name)}
+                  </td>
+                  <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
+                    {moveType && typeColor ? (
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[0.7rem] font-semibold text-white opacity-85" style={{ backgroundColor: typeColor }}>
+                        <Image
+                          src={PokemonTypes[moveType as keyof typeof PokemonTypes]}
+                          alt={moveType}
+                          width={14}
+                          height={14}
+                          className="w-3.5 h-3.5"
+                        />
+                        {formatName(moveType)}
+                      </span>
+                    ) : (
+                      <span className="inline-block px-2 py-0.5 rounded bg-zinc-200 dark:bg-white/10 text-[0.7rem]">—</span>
+                    )}
+                  </td>
+                  <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
+                    {damageClass ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[0.7rem] font-semibold uppercase tracking-wider bg-zinc-800/10 text-white border border-zinc-500/30">
+                        <Image
+                          src={categoryImageMap[damageClass]}
+                          alt={damageClass}
+                          width={14}
+                          height={14}
+                          className="w-3.5 h-3.5"
+                        />
+                        {damageClass}
+                      </span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
+                    {moveMeta?.power ?? "—"}
+                  </td>
+                  <td className="py-4 border-b border-zinc-300/60 dark:border-white/5 text-sm text-(--text-secondary)">
+                    {moveMeta?.accuracy ?? "—"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       {filteredMoves.length === 0 && (
         <p className="mt-4 text-sm text-(--text-secondary) absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2">No moves found for this category.</p>
