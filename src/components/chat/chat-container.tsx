@@ -104,6 +104,9 @@ const Chat = () => {
       panel.querySelector<HTMLElement>("textarea:not([disabled])") ?? focusable[0];
     initialFocus?.focus();
 
+    const previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -128,6 +131,12 @@ const Chat = () => {
       const last = tabbable[tabbable.length - 1];
       const active = document.activeElement as HTMLElement | null;
 
+      if (!active || !panel.contains(active)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+        return;
+      }
+
       if (event.shiftKey && active === first) {
         event.preventDefault();
         last.focus();
@@ -141,7 +150,10 @@ const Chat = () => {
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [open]);
 
   return (
@@ -172,9 +184,9 @@ const Chat = () => {
                     </button>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-2 bg-[#C2C7C6] dark:bg-[#45348E] w-full rounded-lg text-[#FBF7EE] dark:text-[#E5DA7F] text-sm">
+                  <div className="min-h-0 flex-1 bg-[#C2C7C6] dark:bg-[#45348E] w-full rounded-lg text-[#FBF7EE] dark:text-[#E5DA7F] text-sm">
                     <ChatHistory
-                      isLoading={isLoading}
+                      className="h-full"
                       messages={messages}
                       onRetry={handleRetry}
                     />

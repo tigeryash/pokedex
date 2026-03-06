@@ -63,7 +63,6 @@ const PokemonTypeEffectiveness = ({ defendingTypes }: PokemonTypeEffectivenessPr
     .filter(([, value]) => value === 0)
     .map(([name]) => capitalize(name));
 
-    console.log(weakTo)
 
   return (
     <div id="effectiveness">

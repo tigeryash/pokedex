@@ -71,11 +71,15 @@ const MessageBody = ({ from, text, message }: MessageBodyProps) => {
 
   return (
   <MessageContent>
+    <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-wide opacity-80">
+      {from === "assistant" ? "Professor" : "Trainer"}
+    </p>
     {from === "assistant" ? (
       <>
         {hasReasoning ? (
           <Reasoning className="w-full" isStreaming={isReasoningStreaming}>
             <ReasoningTrigger />
+            <ReasoningContent>{reasoningText}</ReasoningContent>
           </Reasoning>
         ) : null}
         <MessageResponse>{text}</MessageResponse>

@@ -27,7 +27,6 @@ const PokemonTraining = ({
   const maleRatio = Number.parseFloat(genderRatio);
   const safeMale = Number.isFinite(maleRatio) ? maleRatio : 0;
   const femaleRatio = Number.isFinite(maleRatio) ? 100 - maleRatio : 0;
-  console.log(maleRatio)
   return (
     <div id="training">
       <SectionLabel>Training & Breeding</SectionLabel>

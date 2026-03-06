@@ -4,25 +4,22 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
+import { cn } from "@/lib/utils";
 import type { UIMessage } from "ai";
 import { MessageSquare } from "lucide-react";
 import ChatMessage from "./message";
 
 type ChatHistoryProps = {
+  className?: string;
   messages: UIMessage[];
-  isLoading: boolean;
   onRetry: (messageId: string) => Promise<void>;
 };
 
-const ChatHistory = ({ messages, isLoading, onRetry }: ChatHistoryProps) => {
-  const hasPendingAssistantReply =
-    isLoading &&
-    messages.length > 0 &&
-    messages[messages.length - 1]?.role !== "assistant";
+const ChatHistory = ({ className, messages, onRetry }: ChatHistoryProps) => {
 
   return (
-    <Conversation>
-      <ConversationContent>
+    <Conversation className={cn("h-full", className)}>
+      <ConversationContent className="gap-4 p-2">
         {messages.length === 0 ? (
           <ConversationEmptyState
             icon={<MessageSquare className="size-12" />}
@@ -35,14 +32,8 @@ const ChatHistory = ({ messages, isLoading, onRetry }: ChatHistoryProps) => {
           ))
         )}
 
-        {hasPendingAssistantReply ? (
-          <div className="chat chat-start">
-            <div className="chat-header">Professor</div>
-            <div className="chat-bubble">
-              <span className="loading loading-dots loading-sm"></span>
-            </div>
-          </div>
-        ) : null}
+      
+        
       </ConversationContent>
       <ConversationScrollButton />
     </Conversation>
