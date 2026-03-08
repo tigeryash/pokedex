@@ -5,6 +5,8 @@ type PokemonStore = {
   setTagsClicked: (tagsClicked: boolean) => void;
   isSticky: boolean;
   setIsSticky: (isSticky: boolean) => void;
+  viewMode: "grid" | "list";
+  setViewMode: (viewMode: "grid" | "list") => void;
 };
 
 export const usePokemonStore = create<PokemonStore>((set) => ({
@@ -12,4 +14,6 @@ export const usePokemonStore = create<PokemonStore>((set) => ({
   setTagsClicked: (tagsClicked) => set({ tagsClicked }),
   isSticky: false,
   setIsSticky: (isSticky) => set((state) => (state.isSticky === isSticky ? state : { isSticky })),
+  viewMode: "grid",
+  setViewMode: (viewMode) => set((state) => (state.viewMode === viewMode ? state : { viewMode })),
 }));

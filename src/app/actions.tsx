@@ -4,12 +4,17 @@ import { PokemonClient } from "pokenode-ts";
 
 const P = new PokemonClient();
 
+const getIdFromUrl = (url: string) => {
+  const parts = url.split("/").filter(Boolean);
+  return parseInt(parts[parts.length - 1], 10);
+};
+
 export async function fetchPokemon({ 
   page = 1, 
   limit = 50,
   types = [],
   regions = [],
-  sort = "numerical",
+  sort = "numerical-asc",
   search = ""
 }: { 
   page?: number; 
@@ -19,8 +24,14 @@ export async function fetchPokemon({
   sort?: string;
   search?: string;
 }) {
-  const pokemon = await P.listPokemons((page - 1) * limit, limit);
-  let results = pokemon.results;
+  // Fetch up to the latest known gen to enable global sorting/filtering
+  const allPokemonData = await P.listPokemons(0, 1025);
+  
+  // Map it to include IDs
+  let results = allPokemonData.results.map((p) => ({
+    ...p,
+    id: getIdFromUrl(p.url),
+  }));
 
   // Filter by search term first
   if (search) {
@@ -30,36 +41,24 @@ export async function fetchPokemon({
   }
 
   // If regions are specified, filter by region ID ranges
-  if (regions && regions.length > 0 && regions.length < 9) {
+  if (regions && regions.length > 0) {
     const { RegionIdRanges } = await import("@/lib/constants");
-    const regionRanges = regions.map(r => RegionIdRanges[r]).filter(Boolean);
+    const regionRanges = regions.map((r: string) => RegionIdRanges[r]).filter(Boolean);
     
     if (regionRanges.length > 0) {
-      const allowedIds: number[] = [];
-      regionRanges.forEach(range => {
-        for (let i = range.start; i <= range.end; i++) {
-          allowedIds.push(i);
-        }
+      results = results.filter(p => {
+        return regionRanges.some(range => p.id >= range.start && p.id <= range.end);
       });
-      
-      // Get pokemon with their IDs and filter
-      const pokemonWithDetails = await Promise.all(
-        results.slice(0, 100).map(async (p, idx) => {
-          const id = (page - 1) * limit + idx + 1;
-          return { ...p, id };
-        })
-      );
-      
-      results = pokemonWithDetails.filter(p => allowedIds.includes(p.id));
     }
   }
 
   // If types are specified, filter by type
   if (types && types.length > 0) {
-    // Get all pokemon and filter by type
     const typePromises = types.map(type => P.getTypeByName(type));
     const typeData = await Promise.all(typePromises);
     
+    // Create an intersection of types or union depending on desired behavior.
+    // Let's do union: if pokemon has ANY of the specified types.
     const allowedPokemonNames = new Set<string>();
     typeData.forEach(type => {
       type.pokemon?.forEach(p => {
@@ -70,21 +69,32 @@ export async function fetchPokemon({
     results = results.filter(p => allowedPokemonNames.has(p.name));
   }
 
-  // Sort results
+  // Sort results globally
   switch (sort) {
-    case "alphabetical":
+    case "alphabetical-asc":
       results.sort((a, b) => a.name.localeCompare(b.name));
       break;
-    case "numerical":
+    case "alphabetical-desc":
+      results.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    case "numerical-desc":
+      results.sort((a, b) => b.id - a.id);
+      break;
+    case "numerical-asc":
     default:
-      // Already in numerical order from API
+      results.sort((a, b) => a.id - b.id);
       break;
   }
 
+  // Finally paginate
+  const startIndex = (page - 1) * limit;
+  const paginatedResults = results.slice(startIndex, startIndex + limit);
+
   return {
-    ...pokemon,
-    results,
-    count: results.length,
+    count: results.length, // total matching
+    next: startIndex + limit < results.length ? true : null,
+    previous: startIndex > 0 ? true : null,
+    results: paginatedResults,
   };
 }
 
