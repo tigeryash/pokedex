@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Pokemon } from "pokenode-ts";
+import { motion } from "framer-motion";
 
 const PokemonCardSkeleton = () => (
   <div className="skeleton h-24 w-full rounded-xl bg-gray-700 shadow-lg md:h-76" />
@@ -57,8 +58,10 @@ const PokemonCard = ({ name, viewMode = "grid" }: { name: string; viewMode?: "gr
 
     if (viewMode === "list") {
       return (
-        <div
-          className="bg-[#FBF7EE] dark:bg-zinc-900/60 shadow-md hover:shadow-xl transition-all p-3 sm:px-4 rounded-xl flex items-center justify-between relative border-l-4 border-r-4 cursor-pointer group"
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="bg-[#FBF7EE] dark:bg-zinc-900/60 shadow-md hover:shadow-xl p-3 sm:px-4 rounded-xl flex items-center justify-between relative border-l-4 border-r-4 cursor-pointer group"
           style={{
             borderLeftColor: topColor,
             borderRightColor: bottomColor,
@@ -98,14 +101,16 @@ const PokemonCard = ({ name, viewMode = "grid" }: { name: string; viewMode?: "gr
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       );
     }
 
     // Grid View
     return (
-      <div
-        className="bg-[#FBF7EE] dark:bg-indigo-950/40 shadow-xl py-3 px-2 rounded-xl flex flex-col justify-between relative border-t-4 border-b-4 cursor-pointer group hover:scale-[1.02] transition-transform"
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="bg-[#FBF7EE] dark:bg-indigo-950/40 shadow-xl py-3 px-2 rounded-xl flex flex-col justify-between relative border-t-4 border-b-4 cursor-pointer group"
         style={{
           borderTopColor: topColor,
           borderBottomColor: bottomColor,
@@ -119,10 +124,10 @@ const PokemonCard = ({ name, viewMode = "grid" }: { name: string; viewMode?: "gr
           height={250}
           className="h-auto w-25 sm:w-37.5 md:w-full max-w-[200px] mx-auto group-hover:drop-shadow-2xl transition-all"
         />
-        <div className="flex flex-row items-center justify-between border-t border-gray-300 dark:border-gray-700/50 pt-2 px-2 mt-2 gap-1 sm:gap-2">
+        <div className="flex flex-col md:flex-row justify-between md:border-t border-gray-300 dark:border-gray-700/50 pt-2 px-2 mt-2 gap-2">
           <div className="flex flex-col">
             <h3
-              className="text-lg sm:text-lg lg:text-xl font-bold capitalize truncate"
+              className="text-lg sm:text-xl font-bold capitalize"
               style={{ color: topColor, maxWidth: "100px" }}
             >
               {pokemonData.name}
@@ -132,7 +137,7 @@ const PokemonCard = ({ name, viewMode = "grid" }: { name: string; viewMode?: "gr
             </p>
           </div>
 
-          <div className="gap-1 flex justify-end items-center flex-shrink-0">
+          <div className="gap-1 flex justify-start md:justify-end items-center mt-1 md:mt-0">
             {pokemonData.types.map((type: any) => (
               <Image
                 key={type.type.name}
@@ -145,7 +150,7 @@ const PokemonCard = ({ name, viewMode = "grid" }: { name: string; viewMode?: "gr
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 };

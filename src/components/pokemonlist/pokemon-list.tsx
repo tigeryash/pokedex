@@ -124,51 +124,92 @@ const PokemonList = () => {
     return null;
   };
 
-  // Build the render list injecting region headers if needed
-  const renderItems: React.ReactNode[] = [];
-  let currentRegion: string | null = null;
-
-  pokemonNames.forEach((pokemon, index) => {
-    if (showRegionHeaders) {
-      const region = getRegionForId(pokemon.id);
-      if (region && region !== currentRegion) {
-        currentRegion = region;
-        renderItems.push(
-          <div
-            key={`region-${region}`}
-            className="col-span-full flex justify-center my-6"
-          >
-            <div className="px-6 py-2 rounded-full font-bold text-xl md:text-2xl text-zinc-800 dark:text-zinc-200 uppercase tracking-widest shadow-md border border-zinc-300 dark:border-zinc-700 bg-[#f4f7fa]/90 dark:bg-zinc-900/90 backdrop-blur-md">
-              {region}
-            </div>
-          </div>
-        );
-      }
-    }
-
-    renderItems.push(
-      <motion.div
-        key={pokemon.name}
-        animate={{ opacity: 1, y: 0 }}
-        initial={{ opacity: 0, y: 20 }}
-        transition={{
-          delay: (index % PAGE_SIZE) * 0.02,
-          duration: 0.3,
-          ease: "easeOut",
-        }}
-      >
-        <PokemonCard name={pokemon.name} viewMode={viewMode} />
-      </motion.div>
-    );
-  });
-
+  // Build the render list
   const gridClasses = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 xl:gap-6";
   const listClasses = "flex flex-col gap-4";
 
+  let renderContent;
+
+  if (showRegionHeaders) {
+    // Group Pokémon by internal region
+    const groups: Record<string, PokemonItem[]> = {};
+    const unknownRegion: PokemonItem[] = [];
+
+    pokemonNames.forEach((pokemon) => {
+      const region = getRegionForId(pokemon.id);
+      if (region) {
+        if (!groups[region]) groups[region] = [];
+        groups[region].push(pokemon);
+      } else {
+        unknownRegion.push(pokemon);
+      }
+    });
+
+    renderContent = (
+      <>
+        {Object.entries(groups).map(([region, pokemons], regIndex) => (
+          <div key={`region-group-${region}`} className="relative mb-12 w-full">
+            <div className="sticky top-[5.9rem] md:top-[5.9rem] z-2 flex mb-4 justify-start pl-2 bg-transparent shadow-sm  -ml-2 -top-1">
+              <div className="font-bold text-3xl md:text-5xl bg-black/20 text-zinc-800 dark:text-zinc-200 uppercase tracking-widest backdrop-blur-[2px] rounded-lg p-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] px-2">
+                {region}
+              </div>
+            </div>
+            
+            <div className={viewMode === "grid" ? gridClasses : listClasses}>
+              {pokemons.map((pokemon, index) => (
+                <motion.div
+                  key={pokemon.name}
+                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  transition={{ delay: (index % PAGE_SIZE) * 0.02, duration: 0.3, ease: "easeOut" }}
+                >
+                  <PokemonCard name={pokemon.name} viewMode={viewMode} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        ))}
+        
+        {unknownRegion.length > 0 && (
+          <div className="relative mb-12 w-full">
+            <div className={`mt-8 ${viewMode === "grid" ? gridClasses : listClasses}`}>
+              {unknownRegion.map((pokemon, index) => (
+                <motion.div
+                  key={pokemon.name}
+                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  transition={{ delay: (index % PAGE_SIZE) * 0.02, duration: 0.3, ease: "easeOut" }}
+                >
+                  <PokemonCard name={pokemon.name} viewMode={viewMode} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  } else {
+    // Standard rendering without groups
+    renderContent = (
+      <div className={`relative flex-1 w-full mt-4 ${viewMode === "grid" ? gridClasses : listClasses}`}>
+        {pokemonNames.map((pokemon, index) => (
+          <motion.div
+            key={pokemon.name}
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ delay: (index % PAGE_SIZE) * 0.02, duration: 0.3, ease: "easeOut" }}
+          >
+            <PokemonCard name={pokemon.name} viewMode={viewMode} />
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className={`relative flex-1 w-full ${viewMode === "grid" ? gridClasses : listClasses}`}>
-        {renderItems}
+      <div className="w-full flex flex-col flex-1">
+        {renderContent}
       </div>
       {!loading && hasMore && <div ref={ref} className="h-10 w-full" />}
       {loading && (
