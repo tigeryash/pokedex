@@ -149,8 +149,8 @@ const PokemonList = () => {
       <>
         {Object.entries(groups).map(([region, pokemons], regIndex) => (
           <div key={`region-group-${region}`} className="relative mb-12 w-full">
-            <div className="sticky top-[5.9rem] md:top-[5.9rem] z-2 flex mb-4 justify-start pl-2 bg-transparent shadow-sm  -ml-2 -top-1">
-              <div className="font-bold text-3xl md:text-5xl bg-black/20 text-zinc-800 dark:text-zinc-200 uppercase tracking-widest backdrop-blur-[2px] rounded-lg p-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] px-2">
+            <div className="sticky top-[5.9rem] md:top-[5.9rem] z-2 flex mb-4 justify-start pl-2 bg-transparent  -ml-2 -top-1">
+              <div className="font-bold text-3xl md:text-5xl dark:bg-black/20 bg-white/20 text-zinc-800 dark:text-zinc-200 uppercase tracking-widest backdrop-blur-[2px] rounded-lg p-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] px-2">
                 {region}
               </div>
             </div>
